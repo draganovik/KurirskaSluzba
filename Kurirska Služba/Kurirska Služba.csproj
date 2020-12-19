@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net5.0-windows</TargetFramework>
+    <RootNamespace>Kurirska_Služba</RootNamespace>
+    <UseWPF>true</UseWPF>
+    <StartupObject>Kurirska_Služba.App</StartupObject>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="CustomControls\" />
+    <Folder Include="Forms\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
+  </ItemGroup>
+
+</Project>

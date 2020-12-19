@@ -1,0 +1,70 @@
+﻿<Window x:Class="Kurirska_Služba.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:views="clr-namespace:Kurirska_Služba.Views"
+        mc:Ignorable="d"
+        Title="Kurirska Služba" MinHeight="450" MinWidth="680" Height="500" Width="800" WindowStyle="SingleBorderWindow">
+    <DockPanel>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="Opcije" >
+                <MenuItem Header="O nalogu"/>
+                <Separator/>
+                <MenuItem Header="Cenovnik"/>
+                <Separator/>
+                <MenuItem Header="Promeni server"/>
+                <MenuItem Header="Odjavi se"/>
+                <MenuItem Header="Zatvori aplikaciju" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
+                    <MenuItem.Icon>
+                        <Image Source=""/>
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
+            <MenuItem Header="Dodaj" >
+                <MenuItem Header="Novi paket" />
+                <MenuItem Header="Novi kurir" />
+                <MenuItem Header="Novi klijent" />
+                <MenuItem Header="Novi menadžer" />
+            </MenuItem>
+            <MenuItem Header="Pomoć" >
+                <MenuItem Header="Nabavite novu verziju" />
+                <MenuItem Header="Podrška" />
+                <Separator/>
+                <MenuItem Header="O aplikaciji" />
+            </MenuItem>
+        </Menu>
+        <TabControl TabStripPlacement="left" Margin="10,20,10,10">
+            <TabItem>
+                <TabItem.Header>
+                    <Label Content="Istorija pošiljki"/>
+                </TabItem.Header>
+                <Grid>
+                    <views:PackageHistory/>
+                </Grid>
+            </TabItem>
+            <TabItem IsSelected="True">
+                <TabItem.Header>
+                    <Label Content="Pošiljke"/>
+                </TabItem.Header>
+                <Grid>
+                    <views:Packages/>
+                </Grid>
+            </TabItem>
+            <TabItem>
+                <TabItem.Header>
+                    <Label Content="Kuriri"/>
+                </TabItem.Header>
+                <Grid>
+                    <views:Couriers/>
+                </Grid>
+            </TabItem>
+            <TabItem>
+                <TabItem.Header>
+                    <Label Content="Klijenti"/>
+                </TabItem.Header>
+                <Grid>
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </DockPanel>
+</Window>
