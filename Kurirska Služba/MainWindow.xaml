@@ -4,27 +4,19 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:views="clr-namespace:Kurirska_Služba.Views"
         mc:Ignorable="d"
-        Title="Kurirska Služba" MinHeight="450" MinWidth="680" Height="500" Width="800" WindowStyle="SingleBorderWindow">
+        Title="Kurirska Služba" MinHeight="450" MinWidth="680" Height="500" Width="800" WindowStyle="SingleBorderWindow" WindowStartupLocation="CenterScreen">
     <DockPanel>
-        <Menu DockPanel.Dock="Top">
-            <MenuItem Header="Opcije" >
-                <MenuItem Header="O nalogu"/>
-                <Separator/>
-                <MenuItem Header="Cenovnik"/>
-                <Separator/>
+        <Menu DockPanel.Dock="Top" IsMainMenu="True" FlowDirection="LeftToRight">
+            <MenuItem Header="Opcije">
                 <MenuItem Header="Promeni server"/>
-                <MenuItem Header="Odjavi se"/>
-                <MenuItem Header="Zatvori aplikaciju" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
-                    <MenuItem.Icon>
-                        <Image Source=""/>
-                    </MenuItem.Icon>
+                <MenuItem Header="Zatvori aplikaciju">
                 </MenuItem>
             </MenuItem>
             <MenuItem Header="Dodaj" >
-                <MenuItem Header="Novi paket" />
-                <MenuItem Header="Novi kurir" />
-                <MenuItem Header="Novi klijent" />
-                <MenuItem Header="Novi menadžer" />
+                <MenuItem x:Name="miNewPackage" Header="Novi paket" Click="miNewPackage_Click" />
+                <MenuItem x:Name="miNewCourier" Header="Novi kurir" Click="miNewCourier_Click" />
+                <MenuItem x:Name="miNewClient" Header="Novi klijent" Click="miNewClient_Click" />
+                <MenuItem x:Name="miNewLocation" Header="Nova lokacija" Click="miNewLocation_Click" />
             </MenuItem>
             <MenuItem Header="Pomoć" >
                 <MenuItem Header="Nabavite novu verziju" />
@@ -63,6 +55,23 @@
                     <Label Content="Klijenti"/>
                 </TabItem.Header>
                 <Grid>
+                    <views:Clients/>
+                </Grid>
+            </TabItem>
+            <TabItem>
+                <TabItem.Header>
+                    <Label Content="Lokacije"/>
+                </TabItem.Header>
+                <Grid>
+                    <views:Locations/>
+                </Grid>
+            </TabItem>
+            <TabItem>
+                <TabItem.Header>
+                    <Label Content="Cenovnik"/>
+                </TabItem.Header>
+                <Grid>
+                    <views:Prices/>
                 </Grid>
             </TabItem>
         </TabControl>

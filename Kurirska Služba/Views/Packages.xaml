@@ -3,48 +3,28 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:Kurirska_Služba.Views"
+             xmlns:local="clr-namespace:Kurirska_Služba.Views" xmlns:customcontrols="clr-namespace:Kurirska_Služba.CustomControls"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <Grid.ColumnDefinitions>
-        <ColumnDefinition Width="8*"/>
-        <ColumnDefinition Width="12*"/>
-    </Grid.ColumnDefinitions>
-    <ListView Background="Transparent" Grid.Column="0"/>
-    <DockPanel Grid.Column="1">
-        <Grid DockPanel.Dock="Bottom" Margin="20,4,20,20" MaxWidth="600">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="1*"/>
-                    <ColumnDefinition Width="1*"/>
-                </Grid.ColumnDefinitions>
-                <Button Content="Ažuriraj status" Grid.Column="1"/>
-                <Button Content="Otkaži pošiljku" Grid.Column="0"/>
-            </Grid>
-            <Grid DockPanel.Dock="Top" Margin="10,10,0,20" MaxWidth="500" HorizontalAlignment="Stretch">
-                <Label FontSize="20" FontWeight="Bold">Status pošiljke: Preuzeta</Label>
-            </Grid>
-            <ScrollViewer Margin="20,0,20,0" VerticalScrollBarVisibility="Auto">
-                <Grid Background="Transparent" MaxWidth="500" VerticalAlignment="Top">
-                    <Grid.Resources >
-                        <Style TargetType="Border" >
-                            <Setter Property="Padding" Value="10" />
-                        </Style>
-                    </Grid.Resources>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="2*"/>
-                        <ColumnDefinition Width="3*"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-                    <Label Grid.Row="0" Grid.Column="0" Content="Label" VerticalAlignment="Center"/>
-                    <TextBox  Grid.Row="0" Grid.Column="1" VerticalAlignment="Center"></TextBox>
-                    <Label  Grid.Row="1" Grid.Column="0" Content="Label" VerticalAlignment="Center"/>
-                    <TextBox  Grid.Row="1" Grid.Column="1" VerticalAlignment="Center"></TextBox>
-                </Grid>
-            </ScrollViewer>
-        </DockPanel>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <ScrollViewer Grid.Row="1" x:Name="svContainer" CanContentScroll="True" Background="Transparent" HorizontalContentAlignment="Stretch" PreviewMouseWheel="svContainer_PreviewMouseWheel">
+            <ListView x:Name="lvPackages" BorderThickness="0" Background="Transparent" HorizontalContentAlignment="Stretch" SelectionMode="Single" SelectionChanged="lvPackages_SelectionChanged">
+                <customcontrols:CardPackage></customcontrols:CardPackage>
+                <customcontrols:CardPackage></customcontrols:CardPackage>
+                <customcontrols:CardPackage></customcontrols:CardPackage>
+                <customcontrols:CardPackage></customcontrols:CardPackage>
+                <customcontrols:CardPackage></customcontrols:CardPackage>
+                <customcontrols:CardPackage></customcontrols:CardPackage>
+            </ListView>
+        </ScrollViewer>
+        <StackPanel x:Name="spControls" Grid.Row="0" Orientation="Horizontal" FlowDirection="RightToLeft">
+            <Button IsEnabled="False">Upravljaj pošiljkom</Button>
+            <Button IsEnabled="False">Izmeni</Button>
+            <Button IsEnabled="False">Obriši</Button>
+        </StackPanel>
     </Grid>
 </UserControl>

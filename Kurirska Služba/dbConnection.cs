@@ -13,8 +13,8 @@ namespace Kurirska_Služba
         {
             SqlConnectionStringBuilder stringBuilder = new SqlConnectionStringBuilder()
             {
-                DataSource = @"",
-                InitialCatalog = "",
+                DataSource = @"DESKTOP-NQOQKUE/SQLEXPRESS",
+                InitialCatalog = "SistemKurirskeSluzbe",
                 IntegratedSecurity = true
             };
             string responce = stringBuilder.ToString();

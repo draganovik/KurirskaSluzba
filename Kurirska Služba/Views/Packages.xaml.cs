@@ -24,5 +24,30 @@ namespace Kurirska_Služba.Views
         {
             InitializeComponent();
         }
+
+        private void svContainer_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            ScrollViewer scv = (ScrollViewer)sender;
+            scv.ScrollToVerticalOffset(scv.VerticalOffset - e.Delta);
+            e.Handled = true;
+        }
+
+        private void lvPackages_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (lvPackages.SelectedItem != null)
+            {
+                foreach (Button button in spControls.Children)
+                {
+                    button.IsEnabled = true;
+                }
+            }
+            else
+            {
+                foreach (Button button in spControls.Children)
+                {
+                    button.IsEnabled = true;
+                }
+            }
+        }
     }
 }

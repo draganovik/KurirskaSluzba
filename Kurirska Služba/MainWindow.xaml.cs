@@ -1,6 +1,9 @@
-﻿using System;
+﻿using Kurirska_Služba.Forms;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -21,9 +24,63 @@ namespace Kurirska_Služba
     /// </summary>
     public partial class MainWindow : Window
     {
-        public MainWindow()
+        private static readonly FieldInfo _menuDropAlignmentField;
+        static MainWindow()
         {
-            InitializeComponent();
+            _menuDropAlignmentField = typeof(SystemParameters).GetField("_menuDropAlignment", BindingFlags.NonPublic | BindingFlags.Static);
+            System.Diagnostics.Debug.Assert(_menuDropAlignmentField != null);
+
+            EnsureStandardPopupAlignment();
+            SystemParameters.StaticPropertyChanged += SystemParameters_StaticPropertyChanged;
+        }
+
+        private static void SystemParameters_StaticPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            EnsureStandardPopupAlignment();
+        }
+
+        private static void EnsureStandardPopupAlignment()
+        {
+            if (SystemParameters.MenuDropAlignment && _menuDropAlignmentField != null)
+            {
+                _menuDropAlignmentField.SetValue(null, false);
+            }
+        }
+
+        private void miNewPackage_Click(object sender, RoutedEventArgs e)
+        {
+            WindowPackage windowPackage = new("add")
+            {
+                Owner = this
+            };
+            windowPackage.ShowDialog();
+        }
+
+        private void miNewClient_Click(object sender, RoutedEventArgs e)
+        {
+            WindowClient windowClient = new("add")
+            {
+                Owner = this
+            };
+            windowClient.ShowDialog();
+        }
+
+        private void miNewCourier_Click(object sender, RoutedEventArgs e)
+        {
+            WindowCourier windowCourier = new("add")
+            {
+                Owner = this
+            };
+            windowCourier.ShowDialog();
+        }
+
+        private void miNewLocation_Click(object sender, RoutedEventArgs e)
+        {
+            WindowLocation windowLocation = new("add")
+            {
+                Owner = this
+            };
+            windowLocation.ShowDialog();
         }
     }
 }
