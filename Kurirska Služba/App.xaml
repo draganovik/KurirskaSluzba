@@ -12,10 +12,6 @@
             <Setter Property="Margin" Value="2"/>
             <Setter Property="Padding" Value="10,0,10,0"/>
         </Style>
-        <Style TargetType="{x:Type ComboBox}">
-            <Setter Property="Padding" Value="4" />
-            <Setter Property="Margin" Value="8,4,8,4" />
-        </Style>
         <Style TargetType="{x:Type RichTextBox}">
             <Setter Property="Padding" Value="4" />
             <Setter Property="Margin" Value="8,4,8,4" />
@@ -24,7 +20,15 @@
             <Setter Property="Padding" Value="4" />
             <Setter Property="Margin" Value="8,4,8,4" />
         </Style>
+        <Style TargetType="{x:Type ComboBox}">
+            <Setter Property="Padding" Value="4" />
+            <Setter Property="Margin" Value="8,4,8,4" />
+        </Style>
         <Style TargetType="{x:Type TextBox}">
+            <Setter Property="Padding" Value="4" />
+            <Setter Property="Margin" Value="8,4,8,4" />
+        </Style>
+        <Style TargetType="{x:Type PasswordBox}">
             <Setter Property="Padding" Value="4" />
             <Setter Property="Margin" Value="8,4,8,4" />
         </Style>

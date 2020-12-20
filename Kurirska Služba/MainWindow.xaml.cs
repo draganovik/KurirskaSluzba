@@ -74,13 +74,22 @@ namespace Kurirska_Služba
             windowCourier.ShowDialog();
         }
 
-        private void miNewLocation_Click(object sender, RoutedEventArgs e)
+        private void miNewMenadžer_Click(object sender, RoutedEventArgs e)
         {
-            WindowLocation windowLocation = new("add")
+            WindowManager windowManager = new("add")
             {
                 Owner = this
             };
-            windowLocation.ShowDialog();
+            windowManager.ShowDialog();
+        }
+
+        private void miNewPrice_Click(object sender, RoutedEventArgs e)
+        {
+            WindowPrice windowPrice = new("add")
+            {
+                Owner = this
+            };
+            windowPrice.ShowDialog();
         }
     }
 }

@@ -23,5 +23,26 @@ namespace Kurirska_Služba.Forms
         {
             InitializeComponent();
         }
+        public WindowPrice(String windowType)
+        {
+            InitializeComponent();
+            setType(windowType);
+        }
+
+        private void setType(String type)
+        {
+            switch (type)
+            {
+                case "edit":
+                    this.Title = "Izmena cene";
+                    btnApply.Content = "Sačuvaj";
+                    break;
+                case "add":
+                    this.Title = "Dodavanje nove cene";
+                    btnApply.Content = "Dodaj cenu";
+                    break;
+            }
+
+        }
     }
 }

@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace Kurirska_Služba.Views
 {
     /// <summary>
-    /// Interaction logic for Locations.xaml
+    /// Interaction logic for Managers.xaml
     /// </summary>
-    public partial class Locations : UserControl
+    public partial class Managers : UserControl
     {
-        public Locations()
+        public Managers()
         {
             InitializeComponent();
         }

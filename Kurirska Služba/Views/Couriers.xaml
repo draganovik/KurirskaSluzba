@@ -3,48 +3,53 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:Kurirska_Služba.Views"
+             xmlns:local="clr-namespace:Kurirska_Služba.Views" xmlns:customcontrols="clr-namespace:Kurirska_Služba.CustomControls"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="8*"/>
+            <ColumnDefinition Width="6*"/>
             <ColumnDefinition Width="12*"/>
         </Grid.ColumnDefinitions>
-        <ListView Background="Transparent" Grid.Column="0"/>
-        <DockPanel Grid.Column="1">
-            <Grid DockPanel.Dock="Bottom" Margin="20,4,20,20" MaxWidth="600">
+        <StackPanel Grid.Row="0" Grid.Column="2" Orientation="Horizontal" FlowDirection="RightToLeft">
+            <Button>Izmeni</Button>
+            <Button>Obriši kurira</Button>
+        </StackPanel>
+        <DataGrid Grid.RowSpan="2" SelectionMode="Single" SelectionUnit="FullRow" IsReadOnly="True" AlternatingRowBackground="LightBlue" CanUserAddRows="False" >
+            <DataGrid.Columns >
+                <DataGridTextColumn Header="Ime" Width="6*"/>
+                <DataGridTextColumn Header="Lokacija" Width="5*"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        <DockPanel Grid.Column="1" Grid.Row="1">
+            
+            <Grid Margin="8,8,8,0" Background="Transparent" MaxWidth="900" VerticalAlignment="Stretch">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="1*"/>
-                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="2*"/>
                 </Grid.ColumnDefinitions>
-                <Button Content="Sačuvaj" Grid.Column="1"/>
-                <Button Content="Otkaži" Grid.Column="0"/>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="20"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <StackPanel Margin="0,0,0,20" Grid.Row="0" Grid.Column="0" MaxWidth="500" HorizontalAlignment="Stretch">
+                    <Label FontSize="20" FontWeight="Bold" Padding="6,0">Marko Petrov</Label>
+                    <Label FontSize="16" FontWeight="Light" Padding="6,0">@petrovm</Label>
+                </StackPanel>
+                <Label Grid.Row="1" Grid.Column="0" Content="Broj telefona" VerticalAlignment="Center"/>
+                <TextBox IsReadOnly="True"  Grid.Row="1" Grid.Column="1" VerticalAlignment="Center">+381649587009</TextBox>
+                <Label  Grid.Row="2" Grid.Column="0" Content="Lokacija" VerticalAlignment="Center"/>
+                <TextBox IsReadOnly="True" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center">Novi Sad</TextBox>
+                <Label FontSize="14" Padding="6" Grid.Row="4" Grid.ColumnSpan="2" Margin="0,6,0,0">Dodeljeni paketi</Label>
+                <local:Packages Grid.Row="4" Grid.ColumnSpan="2" ></local:Packages>
             </Grid>
-            <Grid DockPanel.Dock="Top" Margin="10,10,0,20" MaxWidth="500" HorizontalAlignment="Stretch">
-                <Label FontSize="20" FontWeight="Bold">Pregled podataka</Label>
-            </Grid>
-            <ScrollViewer Margin="20,0,20,0" VerticalScrollBarVisibility="Auto">
-                <Grid Background="Transparent" MaxWidth="500" VerticalAlignment="Top">
-                    <Grid.Resources >
-                        <Style TargetType="Border" >
-                            <Setter Property="Padding" Value="10" />
-                        </Style>
-                    </Grid.Resources>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="2*"/>
-                        <ColumnDefinition Width="2*"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-                    <Label Grid.Row="0" Grid.Column="0" Content="Label" VerticalAlignment="Center"/>
-                    <TextBox  Grid.Row="0" Grid.Column="1" VerticalAlignment="Center"></TextBox>
-                    <Label  Grid.Row="1" Grid.Column="0" Content="Label" VerticalAlignment="Center"/>
-                    <TextBox  Grid.Row="1" Grid.Column="1" VerticalAlignment="Center"></TextBox>
-                </Grid>
-            </ScrollViewer>
         </DockPanel>
     </Grid>
 </UserControl>

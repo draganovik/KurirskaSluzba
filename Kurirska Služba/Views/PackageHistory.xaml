@@ -11,15 +11,15 @@
             <RowDefinition Height="40"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0" Orientation="Horizontal" FlowDirection="RightToLeft">
+            <Button>Prikaži paket</Button>
+            <Button>Izmeni</Button>
+        </StackPanel>
         <DataGrid Grid.Row="1" SelectionMode="Single" SelectionUnit="FullRow" IsReadOnly="True" AlternatingRowBackground="LightBlue" CanUserAddRows="False" >
             <DataGrid.Columns >
                 <DataGridTextColumn Header="Name" Width="*"/>
                 <DataGridTextColumn Header="Time" Width="*"/>
             </DataGrid.Columns>
         </DataGrid>
-        <StackPanel Grid.Row="0" Orientation="Horizontal" FlowDirection="RightToLeft">
-            <Button>Prikaži paket</Button>
-            <Button>Izmeni</Button>
-        </StackPanel>
     </Grid>
 </UserControl>

@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:views="clr-namespace:Kurirska_Služba.Views"
         mc:Ignorable="d"
-        Title="Kurirska Služba" MinHeight="450" MinWidth="680" Height="500" Width="800" WindowStyle="SingleBorderWindow" WindowStartupLocation="CenterScreen">
+        Title="Kurirska Služba" MinHeight="500" MinWidth="800" Height="500" Width="800" WindowStyle="SingleBorderWindow" WindowStartupLocation="CenterScreen">
     <DockPanel>
         <Menu DockPanel.Dock="Top" IsMainMenu="True" FlowDirection="LeftToRight">
             <MenuItem Header="Opcije">
@@ -16,7 +16,8 @@
                 <MenuItem x:Name="miNewPackage" Header="Novi paket" Click="miNewPackage_Click" />
                 <MenuItem x:Name="miNewCourier" Header="Novi kurir" Click="miNewCourier_Click" />
                 <MenuItem x:Name="miNewClient" Header="Novi klijent" Click="miNewClient_Click" />
-                <MenuItem x:Name="miNewLocation" Header="Nova lokacija" Click="miNewLocation_Click" />
+                <MenuItem x:Name="miNewMenadžer" Header="Novi menadžer" Click="miNewMenadžer_Click" />
+                <MenuItem x:Name="miNewPrice" Header="Nova cena" Click="miNewPrice_Click" />
             </MenuItem>
             <MenuItem Header="Pomoć" >
                 <MenuItem Header="Nabavite novu verziju" />
@@ -25,7 +26,7 @@
                 <MenuItem Header="O aplikaciji" />
             </MenuItem>
         </Menu>
-        <TabControl TabStripPlacement="left" Margin="10,20,10,10">
+        <TabControl TabStripPlacement="left" Margin="4,20,0,0">
             <TabItem>
                 <TabItem.Header>
                     <Label Content="Istorija pošiljki"/>
@@ -60,10 +61,10 @@
             </TabItem>
             <TabItem>
                 <TabItem.Header>
-                    <Label Content="Lokacije"/>
+                    <Label Content="Menadžeri"/>
                 </TabItem.Header>
                 <Grid>
-                    <views:Locations/>
+                    <views:Managers/>
                 </Grid>
             </TabItem>
             <TabItem>

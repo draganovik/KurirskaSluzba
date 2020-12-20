@@ -86,7 +86,7 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Label Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Center">Postarina</Label>
-                <ComboBox Grid.Column="1"></ComboBox>
+                <TextBox IsReadOnly="true" Grid.Column="1"></TextBox>
             </Grid>
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -102,7 +102,7 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Label Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Center">Vreme dostave</Label>
-                <DatePicker Grid.Column="1"></DatePicker>
+                <DatePicker IsTodayHighlighted="True" Grid.Column="1" FirstDayOfWeek="Monday" SelectedDateFormat="Short" FontSize="18"/>
             </Grid>
             <Grid>
                 <Grid.ColumnDefinitions>

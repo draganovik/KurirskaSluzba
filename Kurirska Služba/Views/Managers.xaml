@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="Kurirska_Služba.Views.Locations"
+﻿<UserControl x:Class="Kurirska_Služba.Views.Managers"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -19,7 +19,6 @@
         </DataGrid>
         <StackPanel Grid.Row="0" Orientation="Horizontal" FlowDirection="RightToLeft">
             <Button>Izmeni</Button>
-            <Button>Obriši</Button>
         </StackPanel>
     </Grid>
 </UserControl>

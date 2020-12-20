@@ -11,8 +11,8 @@
             <RowDefinition Height="40"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <ScrollViewer Grid.Row="1" x:Name="svContainer" CanContentScroll="True" Background="Transparent" HorizontalContentAlignment="Stretch" PreviewMouseWheel="svContainer_PreviewMouseWheel">
-            <ListView x:Name="lvPackages" BorderThickness="0" Background="Transparent" HorizontalContentAlignment="Stretch" SelectionMode="Single" SelectionChanged="lvPackages_SelectionChanged">
+        <ScrollViewer Grid.Row="1" x:Name="svContainer" VerticalScrollBarVisibility="Auto" CanContentScroll="True" Background="Transparent" HorizontalContentAlignment="Stretch" PreviewMouseWheel="svContainer_PreviewMouseWheel">
+            <ListView MaxWidth="900" x:Name="lvPackages" BorderThickness="0" Background="Transparent" HorizontalContentAlignment="Stretch" SelectionMode="Single" SelectionChanged="lvPackages_SelectionChanged">
                 <customcontrols:CardPackage></customcontrols:CardPackage>
                 <customcontrols:CardPackage></customcontrols:CardPackage>
                 <customcontrols:CardPackage></customcontrols:CardPackage>

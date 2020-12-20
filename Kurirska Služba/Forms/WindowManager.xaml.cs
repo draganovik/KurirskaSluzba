@@ -15,15 +15,15 @@ using System.Windows.Shapes;
 namespace Kurirska_Služba.Forms
 {
     /// <summary>
-    /// Interaction logic for WindowLocation.xaml
+    /// Interaction logic for WindowManager.xaml
     /// </summary>
-    public partial class WindowLocation : Window
+    public partial class WindowManager : Window
     {
-        public WindowLocation()
+        public WindowManager()
         {
             InitializeComponent();
         }
-        public WindowLocation(String windowType)
+        public WindowManager(String windowType)
         {
             InitializeComponent();
             setType(windowType);
@@ -34,12 +34,12 @@ namespace Kurirska_Služba.Forms
             switch (type)
             {
                 case "edit":
-                    this.Title = "Izmena podataka lokacije";
+                    this.Title = "Izmena podataka menadžera";
                     btnApply.Content = "Sačuvaj";
                     break;
                 case "add":
-                    this.Title = "Dodavanje nove lokacije";
-                    btnApply.Content = "Dodaj lokaciju";
+                    this.Title = "Dodavanje novog menadžera";
+                    btnApply.Content = "Napravi nalog";
                     break;
             }
 

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Kurirska_Služba.Forms"
         mc:Ignorable="d"
-        Title="WindowClient" Width="500" Height="320" ResizeMode="NoResize" WindowStartupLocation="CenterOwner">
+        Title="WindowClient" Width="500" Height="370" ResizeMode="NoResize" WindowStartupLocation="CenterOwner">
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel Margin="20, 40, 20, 20">
             <Grid>
@@ -47,6 +47,22 @@
                 </Grid.ColumnDefinitions>
                 <Label Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Center">Adresa</Label>
                 <TextBox Grid.Column="1"></TextBox>
+            </Grid>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="160"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Label Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Center">Korisničko ime</Label>
+                <TextBox Grid.Column="1"></TextBox>
+            </Grid>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="160"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Label Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Center">Jednokratna lozinka</Label>
+                <PasswordBox Grid.Column="1"></PasswordBox>
             </Grid>
             <Grid Margin="0,20,0,0">
                 <Grid.ColumnDefinitions>
