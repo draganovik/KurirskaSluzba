@@ -28,27 +28,28 @@ namespace Kurirska_Služba.Forms
 
         private void EnvironmentSetup()
         {
+            sqlConnection = DatabaseConnection.CreateConnection();
             sqlConnection.Open();
             // Load Courier Combo Box items
-            string sqlCallCouriers = @"select KurirID, Ime + ' ' + Prezime as Kurir from tblKurir";
+            string sqlCallCouriers = @"select KurirID, Ime + ' ' + Prezime + ' - ' + Lokacija as Kurir from tblKurir";
             DataTable dtCouriers = new();
             SqlDataAdapter sdaCouriers = new(sqlCallCouriers, sqlConnection);
             sdaCouriers.Fill(dtCouriers);
             cbxCourier.ItemsSource = dtCouriers.DefaultView;
             // Load Sender Combo Box items
-            string sqlCallSender = @"select KlijentID, Ime + ' ' + Prezime as Klijent from tblKlijent";
+            string sqlCallSender = @"select KlijentID, Ime + ' ' + Prezime + ' [@' + KorisnickoIme + ']' as Klijent from tblKlijent";
             DataTable dtSender = new();
             SqlDataAdapter sdaSender = new(sqlCallSender, sqlConnection);
             sdaSender.Fill(dtSender);
             cbxSender.ItemsSource = dtSender.DefaultView;
             // Load Reciever Combo Box items
-            string sqlCallReceiver = @"select KlijentID, Ime + ' ' + Prezime as Klijent from tblKlijent";
+            string sqlCallReceiver = @"select KlijentID, Ime + ' ' + Prezime + ' [@' + KorisnickoIme + ']' as Klijent from tblKlijent";
             DataTable dtReceiver = new();
             SqlDataAdapter sdaReceiver = new(sqlCallReceiver, sqlConnection);
             sdaReceiver.Fill(dtReceiver);
             cbxReceiver.ItemsSource = dtReceiver.DefaultView;
             // Load Postage Combo Box items
-            string sqlCallPostage = @"select CenaID, Opis + ' - ' + Cena as Postarina from tblCenovnik";
+            string sqlCallPostage = @"select CenaID, Opis + ' - ' + CONVERT(nvarchar, Cena) + ' RSD' as Postarina from tblCenovnik";
             DataTable dtPostage = new();
             SqlDataAdapter sdaPostage = new(sqlCallPostage, sqlConnection);
             sdaPostage.Fill(dtPostage);
@@ -77,6 +78,7 @@ namespace Kurirska_Služba.Forms
         {
             try
             {
+                sqlConnection = DatabaseConnection.CreateConnection();
                 sqlConnection.Open();
                 SqlCommand command = new()
                 {
@@ -86,15 +88,15 @@ namespace Kurirska_Služba.Forms
                 command.Parameters.Add("@Tezina", System.Data.SqlDbType.Int).Value = tbxWeight.Text;
                 // TODO: Implement ManagerID
                 command.Parameters.Add("@Menadzer", System.Data.SqlDbType.Int).Value = 1;
-                command.Parameters.Add("@Kurir", System.Data.SqlDbType.Int).Value = cbxCourier.SelectedIndex;
-                command.Parameters.Add("@Posiljalac", System.Data.SqlDbType.Int).Value = cbxSender.SelectedIndex;
-                command.Parameters.Add("@Primalac", System.Data.SqlDbType.Int).Value = cbxReceiver.SelectedIndex;
+                command.Parameters.Add("@Kurir", System.Data.SqlDbType.Int).Value = cbxCourier.SelectedValue;
+                command.Parameters.Add("@Posiljalac", System.Data.SqlDbType.Int).Value = cbxSender.SelectedValue;
+                command.Parameters.Add("@Primalac", System.Data.SqlDbType.Int).Value = cbxReceiver.SelectedValue;
                 command.Parameters.Add("@GradPreuzimanja", System.Data.SqlDbType.NVarChar).Value = tbxPickupCity.Text;
                 command.Parameters.Add("@AdresaPreuzimanja", System.Data.SqlDbType.NVarChar).Value = tbxPickupAddress.Text;
                 command.Parameters.Add("@GradDostave", System.Data.SqlDbType.NVarChar).Value = tbxDropoffCity.Text;
                 command.Parameters.Add("@AdresaDostave", System.Data.SqlDbType.NVarChar).Value = tbxDropoffAddress.Text;
-                command.Parameters.Add("@Postarina", System.Data.SqlDbType.Int).Value = cbxPostage.SelectedIndex;
-                command.Parameters.Add("@Doplata", System.Data.SqlDbType.Money).Value = tbxRansom.Text;
+                command.Parameters.Add("@Postarina", System.Data.SqlDbType.Int).Value = cbxPostage.SelectedValue;
+                command.Parameters.Add("@Doplata", System.Data.SqlDbType.Money).Value = tbxRansom.Text == "" ? 0 : tbxRansom.Text;
                 // TODO: Implement DateTime Picker
                 command.Parameters.Add("@VremeDostave", System.Data.SqlDbType.DateTime).Value = ((DateTime)dpDropoffDate.SelectedDate).ToString("yyyy-MM-dd", CultureInfo.CurrentCulture);
                 command.Parameters.Add("@Napomena", System.Data.SqlDbType.NVarChar).Value = new TextRange(rtbComment.Document.ContentStart, rtbComment.Document.ContentEnd).Text;

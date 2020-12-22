@@ -86,7 +86,7 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Label Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Center">Postarina</Label>
-                <ComboBox x:Name="cbxPostage" IsReadOnly="true" Grid.Column="1" DisplayMemberPath="Cena" SelectedValuePath="CenaID"></ComboBox>
+                <ComboBox x:Name="cbxPostage" IsReadOnly="true" Grid.Column="1" DisplayMemberPath="Postarina" SelectedValuePath="CenaID"/>
             </Grid>
             <Grid>
                 <Grid.ColumnDefinitions>

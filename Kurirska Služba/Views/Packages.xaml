@@ -13,12 +13,6 @@
         </Grid.RowDefinitions>
         <ScrollViewer Grid.Row="1" x:Name="svContainer" VerticalScrollBarVisibility="Auto" CanContentScroll="True" Background="Transparent" HorizontalContentAlignment="Stretch" PreviewMouseWheel="svContainer_PreviewMouseWheel">
             <ListView MaxWidth="900" x:Name="lvPackages" BorderThickness="0" Background="Transparent" HorizontalContentAlignment="Stretch" SelectionMode="Single" SelectionChanged="lvPackages_SelectionChanged">
-                <customcontrols:CardPackage></customcontrols:CardPackage>
-                <customcontrols:CardPackage></customcontrols:CardPackage>
-                <customcontrols:CardPackage></customcontrols:CardPackage>
-                <customcontrols:CardPackage></customcontrols:CardPackage>
-                <customcontrols:CardPackage></customcontrols:CardPackage>
-                <customcontrols:CardPackage></customcontrols:CardPackage>
             </ListView>
         </ScrollViewer>
         <StackPanel x:Name="spControls" Grid.Row="0" Orientation="Horizontal" FlowDirection="RightToLeft">
