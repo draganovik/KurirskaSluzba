@@ -14,7 +14,7 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Label Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Center">Ime pošiljke</Label>
-                <TextBox Grid.Column="1"></TextBox>
+                <TextBox x:Name="tbxName" Grid.Column="1"></TextBox>
             </Grid>
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -22,7 +22,7 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Label Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Center">Tezina</Label>
-                <TextBox Grid.Column="1"></TextBox>
+                <TextBox x:Name="tbxWeight" Grid.Column="1"></TextBox>
             </Grid>
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -30,7 +30,7 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Label Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Center">Dodeljen kurir</Label>
-                <ComboBox Grid.Column="1"></ComboBox>
+                <ComboBox x:Name="cbxCourier" Grid.Column="1"></ComboBox>
             </Grid>
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -38,7 +38,7 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Label Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Center">Pošiljalac</Label>
-                <ComboBox Grid.Column="1"></ComboBox>
+                <ComboBox x:Name="cbxSender" Grid.Column="1"></ComboBox>
             </Grid>
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -46,7 +46,7 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Label Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Center">Primalac</Label>
-                <ComboBox Grid.Column="1"></ComboBox>
+                <ComboBox x:Name="cbxReceiver" Grid.Column="1"></ComboBox>
             </Grid>
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -54,7 +54,7 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Label Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Center">Grad preuzimanja</Label>
-                <ComboBox Grid.Column="1"></ComboBox>
+                <TextBox x:Name="tbxPickupCity" Grid.Column="1"></TextBox>
             </Grid>
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -62,7 +62,7 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Label Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Center">Adresa preuzimanja</Label>
-                <TextBox Grid.Column="1"></TextBox>
+                <TextBox x:Name="tbxPickupAddress" Grid.Column="1"></TextBox>
             </Grid>
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -70,7 +70,7 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Label Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Center">Grad dostave</Label>
-                <ComboBox Grid.Column="1"></ComboBox>
+                <TextBox x:Name="tbxDropoffCity" Grid.Column="1"></TextBox>
             </Grid>
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -78,7 +78,7 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Label Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Center">Adresa dostave</Label>
-                <TextBox Grid.Column="1"></TextBox>
+                <TextBox x:Name="tbxDropoffAddress" Grid.Column="1"></TextBox>
             </Grid>
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -86,7 +86,7 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Label Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Center">Postarina</Label>
-                <TextBox IsReadOnly="true" Grid.Column="1"></TextBox>
+                <ComboBox x:Name="cbxPostage" IsReadOnly="true" Grid.Column="1"></ComboBox>
             </Grid>
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -94,7 +94,7 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Label Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Center">Naplata za paket</Label>
-                <ComboBox Grid.Column="1"></ComboBox>
+                <TextBox x:Name="tbxRansom" Grid.Column="1"></TextBox>
             </Grid>
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -102,7 +102,7 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Label Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Center">Vreme dostave</Label>
-                <DatePicker IsTodayHighlighted="True" Grid.Column="1" FirstDayOfWeek="Monday" SelectedDateFormat="Short" FontSize="18"/>
+                <DatePicker x:Name="dpDropoffDate" IsTodayHighlighted="True" Grid.Column="1" FirstDayOfWeek="Monday" SelectedDateFormat="Short" FontSize="18"/>
             </Grid>
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -110,7 +110,7 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Label Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Center">Napomena</Label>
-                <RichTextBox Grid.Column="1" Height="100"></RichTextBox>
+                <RichTextBox x:Name="rtbComment" Grid.Column="1" Height="100"></RichTextBox>
             </Grid>
             <Grid Margin="0,20,0,0">
                 <Grid.ColumnDefinitions>
@@ -118,7 +118,7 @@
                     <ColumnDefinition Width="3*"/>
                     <ColumnDefinition Width="1*"/>
                 </Grid.ColumnDefinitions>
-                <Button x:Name="btnApply" Grid.Column="1" Margin="2,2,2,2">Add</Button>
+                <Button x:Name="btnApply" Grid.Column="1" Margin="2,2,2,2" Click="btnApply_Click">Add</Button>
             </Grid>
         </StackPanel>
     </ScrollViewer>

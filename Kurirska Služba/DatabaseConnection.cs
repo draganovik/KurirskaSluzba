@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 
 namespace Kurirska_Služba
 {
-    class dbConnection
+    class DatabaseConnection
     {
-        public SqlConnection sqlConnection()
+        public static SqlConnection CreateConnection()
         {
             SqlConnectionStringBuilder stringBuilder = new SqlConnectionStringBuilder()
             {
-                DataSource = @"DESKTOP-NQOQKUE/SQLEXPRESS",
+                DataSource = @"DESKTOP-NQOQKUE",
                 InitialCatalog = "SistemKurirskeSluzbe",
                 IntegratedSecurity = true
             };
