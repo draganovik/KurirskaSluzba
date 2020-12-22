@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace Kurirska_Služba
 {
@@ -19,6 +21,17 @@ namespace Kurirska_Služba
             };
             string responce = stringBuilder.ToString();
             return new SqlConnection(responce);
+        }
+        public static DataTable GetTable(string selectCommandText)
+        {
+            SqlConnection sqlConnection = CreateConnection();
+            sqlConnection.Open();
+            SqlDataAdapter sdaCouriers = new(selectCommandText, sqlConnection);
+            DataTable dataTable = new();
+            sdaCouriers.Fill(dataTable);
+            sqlConnection.Dispose();
+            sqlConnection.Close();
+            return dataTable;
         }
     }
 }

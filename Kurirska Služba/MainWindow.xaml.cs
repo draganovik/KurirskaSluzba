@@ -11,7 +11,6 @@ namespace Kurirska_Služba
     /// </summary>
     public partial class MainWindow : Window
     {
-        private static readonly FieldInfo _menuDropAlignmentField;
         static MainWindow()
         {
             _menuDropAlignmentField = typeof(SystemParameters).GetField("_menuDropAlignment", BindingFlags.NonPublic | BindingFlags.Static);
@@ -20,6 +19,9 @@ namespace Kurirska_Služba
             EnsureStandardPopupAlignment();
             SystemParameters.StaticPropertyChanged += SystemParameters_StaticPropertyChanged;
         }
+
+        #region Menubar fix
+        private static readonly FieldInfo _menuDropAlignmentField;
 
         private static void SystemParameters_StaticPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
@@ -33,85 +35,43 @@ namespace Kurirska_Služba
                 _menuDropAlignmentField.SetValue(null, false);
             }
         }
+        #endregion
 
-        private void miNewPackage_Click(object sender, RoutedEventArgs e)
+        private void displayWindow(Window window)
         {
             try
             {
-                WindowPackage windowPackage = new("add")
-                {
-                    Owner = this
-                };
-                windowPackage.ShowDialog();
+                window.ShowDialog();
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Nastao je problem pri postavci okruženja: \n" + ex.Message, "Neuspešno otvaranje prozora", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+        }
+
+        private void miNewPackage_Click(object sender, RoutedEventArgs e)
+        {
+            displayWindow(new WindowPackage("add") { Owner = this });
         }
 
         private void miNewClient_Click(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                WindowClient windowClient = new("add")
-                {
-                    Owner = this
-                };
-                windowClient.ShowDialog();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Nastao je problem pri postavci okruženja: \n" + ex.Message, "Neuspešno otvaranje prozora", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+            displayWindow(new WindowClient("add") { Owner = this });
         }
 
         private void miNewCourier_Click(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                WindowCourier windowCourier = new("add")
-                {
-                    Owner = this
-                };
-                windowCourier.ShowDialog();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Nastao je problem pri postavci okruženja: \n" + ex.Message, "Neuspešno otvaranje prozora", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+            displayWindow(new WindowCourier("add") { Owner = this });
         }
 
         private void miNewMenadžer_Click(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                WindowManager windowManager = new("add")
-                {
-                    Owner = this
-                };
-                windowManager.ShowDialog();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Nastao je problem pri postavci okruženja: \n" + ex.Message, "Neuspešno otvaranje prozora", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+            displayWindow(new WindowManager("add") { Owner = this });
         }
 
         private void miNewPrice_Click(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                WindowPrice windowPrice = new("add")
-                {
-                    Owner = this
-                };
-                windowPrice.ShowDialog();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Nastao je problem pri postavci okruženja: \n" + ex.Message, "Neuspešno otvaranje prozora", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+            displayWindow(new WindowPrice("add") { Owner = this });
         }
     }
 }

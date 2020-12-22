@@ -12,19 +12,20 @@ namespace Kurirska_Služba.Views
     /// </summary>
     public partial class Packages : UserControl
     {
-        SqlConnection sqlConnection = new();
         public Packages()
         {
             InitializeComponent();
             ShowData();
         }
 
+        #region Mouse wheel scroll in list view
         private void svContainer_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
         {
             ScrollViewer scv = (ScrollViewer)sender;
             scv.ScrollToVerticalOffset(scv.VerticalOffset - e.Delta);
             e.Handled = true;
         }
+        #endregion
 
         private void lvPackages_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -45,19 +46,13 @@ namespace Kurirska_Služba.Views
         }
         public void ShowData()
         {
-            sqlConnection = DatabaseConnection.CreateConnection();
-            sqlConnection.Open();
             // TODO: Implement latest package status in the list UI
-            string sqlCallCouriers = @"select PosiljkaID, '#' + CONVERT(nvarchar, PosiljkaID) + ' - ' + Naziv as Ime, GradPreuzimanja + ', ' + AdresaPreuzimanja as Preuzimanje, GradDostave + ', ' + AdresaDostave as Dostava from tblPosiljka";
-            DataTable dtCouriers = new();
-            SqlDataAdapter sdaCouriers = new(sqlCallCouriers, sqlConnection);
-            sdaCouriers.Fill(dtCouriers);
+            string sqlSelectCouriers = @"select PosiljkaID, '#' + CONVERT(nvarchar, PosiljkaID) + ' - ' + Naziv as Ime, GradPreuzimanja + ', ' + AdresaPreuzimanja as Preuzimanje, GradDostave + ', ' + AdresaDostave as Dostava from tblPosiljka";
+            DataTable dtCouriers = DatabaseConnection.GetTable(sqlSelectCouriers);
             foreach (DataRow row in dtCouriers.Rows)
             {
                 lvPackages.Items.Add(new CardPackage(Convert.ToInt32(row["PosiljkaID"].ToString()), row["Ime"].ToString(), row["Preuzimanje"].ToString(), row["Dostava"].ToString(), "TODO"));
             }
-            sqlConnection.Dispose();
-            sqlConnection.Close();
         }
     }
 }

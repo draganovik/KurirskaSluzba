@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,6 +24,13 @@ namespace Kurirska_Služba.Views
         public Clients()
         {
             InitializeComponent();
+            ShowData();
+        }
+        public void ShowData()
+        {
+            string sqlSelect = @"select '@' + KorisnickoIme as 'Korisničko ime', Ime + ' ' +Prezime, Grad, Adresa as Ulica from tblKlijent";
+            DataTable dataTable = DatabaseConnection.GetTable(sqlSelect);
+            dgClients.ItemsSource = dataTable.DefaultView;
         }
     }
 }

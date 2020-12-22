@@ -15,11 +15,7 @@
             <Button>Prikaži paket</Button>
             <Button>Izmeni</Button>
         </StackPanel>
-        <DataGrid Grid.Row="1" SelectionMode="Single" SelectionUnit="FullRow" IsReadOnly="True" AlternatingRowBackground="LightBlue" CanUserAddRows="False" >
-            <DataGrid.Columns >
-                <DataGridTextColumn Header="Name" Width="*"/>
-                <DataGridTextColumn Header="Time" Width="*"/>
-            </DataGrid.Columns>
+        <DataGrid ColumnWidth="*" x:Name="dgPackageHistory" Grid.Row="1" SelectionMode="Single" SelectionUnit="FullRow" IsReadOnly="True" AlternatingRowBackground="LightGray" CanUserAddRows="False" >
         </DataGrid>
     </Grid>
 </UserControl>

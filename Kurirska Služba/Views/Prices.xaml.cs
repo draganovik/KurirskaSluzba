@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,6 +24,13 @@ namespace Kurirska_Služba.Views
         public Prices()
         {
             InitializeComponent();
+            ShowData();
+        }
+        public void ShowData()
+        {
+            string sqlSelect = @"select Opis, Tezina, Cena from tblCenovnik";
+            DataTable dataTable = DatabaseConnection.GetTable(sqlSelect);
+            dgPrices.ItemsSource = dataTable.DefaultView;
         }
     }
 }

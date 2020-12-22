@@ -19,11 +19,7 @@
             <Button>Izmeni</Button>
             <Button>Obriši kurira</Button>
         </StackPanel>
-        <DataGrid Grid.RowSpan="2" SelectionMode="Single" SelectionUnit="FullRow" IsReadOnly="True" AlternatingRowBackground="LightBlue" CanUserAddRows="False" >
-            <DataGrid.Columns >
-                <DataGridTextColumn Header="Ime" Width="6*"/>
-                <DataGridTextColumn Header="Lokacija" Width="5*"/>
-            </DataGrid.Columns>
+        <DataGrid x:Name="dgCouriers" ColumnWidth="*" Grid.RowSpan="2" SelectionMode="Single" SelectionUnit="FullRow" IsReadOnly="True" AlternatingRowBackground="LightGray" CanUserAddRows="False" >
         </DataGrid>
         <DockPanel Grid.Column="1" Grid.Row="1">
             

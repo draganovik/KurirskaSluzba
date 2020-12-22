@@ -63,7 +63,7 @@ namespace Kurirska_Služba.Forms
                 command.CommandText = @"Insert into tblCenovnik(Opis,Tezina,Cena) values(@Opis, @Tezina, @Cena)";
                 command.ExecuteNonQuery();
                 command.Dispose();
-                MessageBox.Show("Operacija uspešno izvršena", "Promena uspešna",MessageBoxButton.OK, MessageBoxImage.Asterisk);
+                MessageBox.Show("Operacija uspešno izvršena", "Promena uspešna", MessageBoxButton.OK, MessageBoxImage.Asterisk);
                 ResetInput();
 
             }
@@ -73,8 +73,8 @@ namespace Kurirska_Služba.Forms
             }
             finally
             {
-                if(sqlConnection != null)
-                sqlConnection.Close();
+                if (sqlConnection != null)
+                    sqlConnection.Close();
             }
 
 
