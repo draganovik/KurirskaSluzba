@@ -1,18 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace Kurirska_Služba.Forms
 {
@@ -27,6 +18,7 @@ namespace Kurirska_Služba.Forms
             InitializeComponent();
             tbxName.Focus();
             sqlConnection = DatabaseConnection.CreateConnection();
+            EnvironmentSetup();
         }
 
         public WindowPackage(String windowType) : this()
@@ -34,6 +26,38 @@ namespace Kurirska_Služba.Forms
             setType(windowType);
         }
 
+        private void EnvironmentSetup()
+        {
+            sqlConnection.Open();
+            // Load Courier Combo Box items
+            string sqlCallCouriers = @"select KurirID, Ime + ' ' + Prezime as Kurir from tblKurir";
+            DataTable dtCouriers = new();
+            SqlDataAdapter sdaCouriers = new(sqlCallCouriers, sqlConnection);
+            sdaCouriers.Fill(dtCouriers);
+            cbxCourier.ItemsSource = dtCouriers.DefaultView;
+            // Load Sender Combo Box items
+            string sqlCallSender = @"select KlijentID, Ime + ' ' + Prezime as Klijent from tblKlijent";
+            DataTable dtSender = new();
+            SqlDataAdapter sdaSender = new(sqlCallSender, sqlConnection);
+            sdaSender.Fill(dtSender);
+            cbxSender.ItemsSource = dtSender.DefaultView;
+            // Load Reciever Combo Box items
+            string sqlCallReceiver = @"select KlijentID, Ime + ' ' + Prezime as Klijent from tblKlijent";
+            DataTable dtReceiver = new();
+            SqlDataAdapter sdaReceiver = new(sqlCallReceiver, sqlConnection);
+            sdaReceiver.Fill(dtReceiver);
+            cbxReceiver.ItemsSource = dtReceiver.DefaultView;
+            // Load Postage Combo Box items
+            string sqlCallPostage = @"select CenaID, Opis + ' - ' + Cena as Postarina from tblCenovnik";
+            DataTable dtPostage = new();
+            SqlDataAdapter sdaPostage = new(sqlCallPostage, sqlConnection);
+            sdaPostage.Fill(dtPostage);
+            cbxPostage.ItemsSource = dtPostage.DefaultView;
+            // Dispose and Close connection
+            sqlConnection.Dispose();
+            if (sqlConnection != null)
+                sqlConnection.Close();
+        }
         private void setType(String type)
         {
             switch (type)
@@ -47,7 +71,6 @@ namespace Kurirska_Služba.Forms
                     btnApply.Content = "Napravi paket";
                     break;
             }
-
         }
 
         private void btnApply_Click(object sender, RoutedEventArgs e)
@@ -61,19 +84,22 @@ namespace Kurirska_Služba.Forms
                 };
                 command.Parameters.Add("@Naziv", System.Data.SqlDbType.NVarChar).Value = tbxName.Text;
                 command.Parameters.Add("@Tezina", System.Data.SqlDbType.Int).Value = tbxWeight.Text;
+                // TODO: Implement ManagerID
                 command.Parameters.Add("@Menadzer", System.Data.SqlDbType.Int).Value = 1;
-                command.Parameters.Add("@Kurir", System.Data.SqlDbType.Int).Value = 1;
-                command.Parameters.Add("@Posiljalac", System.Data.SqlDbType.Int).Value = 1;
-                command.Parameters.Add("@Primalac", System.Data.SqlDbType.Int).Value = 1;
+                command.Parameters.Add("@Kurir", System.Data.SqlDbType.Int).Value = cbxCourier.SelectedIndex;
+                command.Parameters.Add("@Posiljalac", System.Data.SqlDbType.Int).Value = cbxSender.SelectedIndex;
+                command.Parameters.Add("@Primalac", System.Data.SqlDbType.Int).Value = cbxReceiver.SelectedIndex;
                 command.Parameters.Add("@GradPreuzimanja", System.Data.SqlDbType.NVarChar).Value = tbxPickupCity.Text;
                 command.Parameters.Add("@AdresaPreuzimanja", System.Data.SqlDbType.NVarChar).Value = tbxPickupAddress.Text;
                 command.Parameters.Add("@GradDostave", System.Data.SqlDbType.NVarChar).Value = tbxDropoffCity.Text;
                 command.Parameters.Add("@AdresaDostave", System.Data.SqlDbType.NVarChar).Value = tbxDropoffAddress.Text;
-                command.Parameters.Add("@Postarina", System.Data.SqlDbType.Int).Value = 1;
+                command.Parameters.Add("@Postarina", System.Data.SqlDbType.Int).Value = cbxPostage.SelectedIndex;
                 command.Parameters.Add("@Doplata", System.Data.SqlDbType.Money).Value = tbxRansom.Text;
-                command.Parameters.Add("@VremeDostave", System.Data.SqlDbType.DateTime).Value = ((DateTime)dpDropoffDate.SelectedDate).ToString("yyyy-MM-dd",CultureInfo.CurrentCulture);
-                command.Parameters.Add("@Napomena", System.Data.SqlDbType.NVarChar).Value =  new TextRange(rtbComment.Document.ContentStart, rtbComment.Document.ContentEnd).Text;
-                command.CommandText = @"insert tblPosiljka (
+                // TODO: Implement DateTime Picker
+                command.Parameters.Add("@VremeDostave", System.Data.SqlDbType.DateTime).Value = ((DateTime)dpDropoffDate.SelectedDate).ToString("yyyy-MM-dd", CultureInfo.CurrentCulture);
+                command.Parameters.Add("@Napomena", System.Data.SqlDbType.NVarChar).Value = new TextRange(rtbComment.Document.ContentStart, rtbComment.Document.ContentEnd).Text;
+                command.CommandText =
+                    @"insert tblPosiljka (
                         Naziv,
                         Tezina,
                         DodeljenMenadzerID,
@@ -87,8 +113,13 @@ namespace Kurirska_Služba.Forms
                         VremeDostave,
                         PostarinaID,
                         DoplataZaPaket,
-                        Napomena)
-                        values(@Naziv, @Tezina, @Menadzer, @Posiljalac, @Primalac, @Kurir, @GradPreuzimanja, @AdresaPreuzimanja, @GradDostave, @AdresaDostave, @VremeDostave, @Postarina, @Doplata, @Napomena)";
+                        Napomena
+                    )values(
+                        @Naziv, @Tezina, @Menadzer, @Posiljalac,
+                        @Primalac, @Kurir, @GradPreuzimanja,
+                        @AdresaPreuzimanja, @GradDostave, @AdresaDostave,
+                        @VremeDostave, @Postarina, @Doplata, @Napomena
+                    )";
                 command.ExecuteNonQuery();
                 command.Dispose();
                 MessageBox.Show("Operacija uspešno izvršena", "Promena uspešna", MessageBoxButton.OK, MessageBoxImage.Asterisk);

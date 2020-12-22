@@ -1,21 +1,8 @@
 ﻿using Kurirska_Služba.Forms;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Windows.Shell;
 
 namespace Kurirska_Služba
 {
@@ -49,47 +36,82 @@ namespace Kurirska_Služba
 
         private void miNewPackage_Click(object sender, RoutedEventArgs e)
         {
-            WindowPackage windowPackage = new("add")
+            try
             {
-                Owner = this
-            };
-            windowPackage.ShowDialog();
+                WindowPackage windowPackage = new("add")
+                {
+                    Owner = this
+                };
+                windowPackage.ShowDialog();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Nastao je problem pri postavci okruženja: \n" + ex.Message, "Neuspešno otvaranje prozora", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private void miNewClient_Click(object sender, RoutedEventArgs e)
         {
-            WindowClient windowClient = new("add")
+            try
             {
-                Owner = this
-            };
-            windowClient.ShowDialog();
+                WindowClient windowClient = new("add")
+                {
+                    Owner = this
+                };
+                windowClient.ShowDialog();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Nastao je problem pri postavci okruženja: \n" + ex.Message, "Neuspešno otvaranje prozora", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private void miNewCourier_Click(object sender, RoutedEventArgs e)
         {
-            WindowCourier windowCourier = new("add")
+            try
             {
-                Owner = this
-            };
-            windowCourier.ShowDialog();
+                WindowCourier windowCourier = new("add")
+                {
+                    Owner = this
+                };
+                windowCourier.ShowDialog();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Nastao je problem pri postavci okruženja: \n" + ex.Message, "Neuspešno otvaranje prozora", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private void miNewMenadžer_Click(object sender, RoutedEventArgs e)
         {
-            WindowManager windowManager = new("add")
+            try
             {
-                Owner = this
-            };
-            windowManager.ShowDialog();
+                WindowManager windowManager = new("add")
+                {
+                    Owner = this
+                };
+                windowManager.ShowDialog();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Nastao je problem pri postavci okruženja: \n" + ex.Message, "Neuspešno otvaranje prozora", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private void miNewPrice_Click(object sender, RoutedEventArgs e)
         {
-            WindowPrice windowPrice = new("add")
+            try
             {
-                Owner = this
-            };
-            windowPrice.ShowDialog();
+                WindowPrice windowPrice = new("add")
+                {
+                    Owner = this
+                };
+                windowPrice.ShowDialog();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Nastao je problem pri postavci okruženja: \n" + ex.Message, "Neuspešno otvaranje prozora", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
     }
 }

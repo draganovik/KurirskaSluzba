@@ -21,7 +21,7 @@
                     <ColumnDefinition Width="160"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <Label Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Center">Tezina</Label>
+                <Label Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Center">Tezina (g)</Label>
                 <TextBox x:Name="tbxWeight" Grid.Column="1"></TextBox>
             </Grid>
             <Grid>
@@ -30,7 +30,7 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Label Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Center">Dodeljen kurir</Label>
-                <ComboBox x:Name="cbxCourier" Grid.Column="1"></ComboBox>
+                <ComboBox x:Name="cbxCourier" Grid.Column="1" DisplayMemberPath="Kurir" SelectedValuePath="KurirID"></ComboBox>
             </Grid>
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -38,7 +38,7 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Label Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Center">Pošiljalac</Label>
-                <ComboBox x:Name="cbxSender" Grid.Column="1"></ComboBox>
+                <ComboBox x:Name="cbxSender" Grid.Column="1" DisplayMemberPath="Klijent" SelectedValuePath="KlijentID"></ComboBox>
             </Grid>
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -46,7 +46,7 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Label Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Center">Primalac</Label>
-                <ComboBox x:Name="cbxReceiver" Grid.Column="1"></ComboBox>
+                <ComboBox x:Name="cbxReceiver" Grid.Column="1" DisplayMemberPath="Klijent" SelectedValuePath="KlijentID"></ComboBox>
             </Grid>
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -86,7 +86,7 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Label Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Center">Postarina</Label>
-                <ComboBox x:Name="cbxPostage" IsReadOnly="true" Grid.Column="1"></ComboBox>
+                <ComboBox x:Name="cbxPostage" IsReadOnly="true" Grid.Column="1" DisplayMemberPath="Cena" SelectedValuePath="CenaID"></ComboBox>
             </Grid>
             <Grid>
                 <Grid.ColumnDefinitions>
