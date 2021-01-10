@@ -6,7 +6,7 @@
     <RootNamespace>Kurirska_Služba</RootNamespace>
     <UseWPF>true</UseWPF>
     <StartupObject>Kurirska_Služba.App</StartupObject>
-    <ApplicationIcon>ks-logo.ico</ApplicationIcon>
+    <ApplicationIcon>ks.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
