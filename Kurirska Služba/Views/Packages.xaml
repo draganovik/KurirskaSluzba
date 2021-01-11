@@ -18,7 +18,7 @@
         <StackPanel x:Name="spControls" Grid.Row="0" Orientation="Horizontal" FlowDirection="RightToLeft">
             <Button IsEnabled="False">Upravljaj pošiljkom</Button>
             <Button IsEnabled="False">Izmeni</Button>
-            <Button IsEnabled="False">Obriši</Button>
+            <Button x:Name="btnDelete" IsEnabled="False" Click="btnDelete_Click">Obriši</Button>
         </StackPanel>
     </Grid>
 </UserControl>

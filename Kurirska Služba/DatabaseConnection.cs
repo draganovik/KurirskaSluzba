@@ -33,5 +33,35 @@ namespace Kurirska_Služba
             sqlConnection.Close();
             return dataTable;
         }
+        public static void DeleteById(string id, string idName, string tableName)
+        {
+            SqlConnection connection = CreateConnection(); ;
+            try
+            {
+                connection.Open();
+                MessageBoxResult result = MessageBox.Show("Da li ste sigurni?", "Upozorenje", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                if (result == MessageBoxResult.Yes)
+                {
+                    SqlCommand command = new SqlCommand
+                    {
+                        Connection = connection
+                    };
+                    command.Parameters.Add("@id", SqlDbType.Int).Value = id;
+                    command.CommandText = @"Delete from " + tableName + " where " + idName + "= " + "@id";
+                    command.ExecuteNonQuery();
+                }
+            }
+            catch (SqlException)
+            {
+                MessageBox.Show("Postoje povezani podaci u drugim tabelama", "Obaveštenje!", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                if (connection != null)
+                {
+                    connection.Close();
+                }
+            }
+        }
     }
 }

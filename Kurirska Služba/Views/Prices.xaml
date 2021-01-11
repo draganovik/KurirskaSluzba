@@ -15,7 +15,7 @@
         </DataGrid>
         <StackPanel Grid.Row="0" Orientation="Horizontal" FlowDirection="RightToLeft">
             <Button>Izmeni</Button>
-            <Button>Obriši</Button>
+            <Button x:Name="btnDelete" Click="btnDelete_Click">Obriši</Button>
         </StackPanel>
     </Grid>
 </UserControl>

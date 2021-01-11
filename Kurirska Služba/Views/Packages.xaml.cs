@@ -49,10 +49,19 @@ namespace Kurirska_Služba.Views
             // TODO: Implement latest package status in the list UI
             string sqlSelectCouriers = @"select PosiljkaID, '#' + CONVERT(nvarchar, PosiljkaID) + ' - ' + Naziv as Ime, Tezina, GradPreuzimanja + ', ' + AdresaPreuzimanja as Preuzimanje, GradDostave + ', ' + AdresaDostave as Dostava from tblPosiljka";
             DataTable dtCouriers = DatabaseConnection.GetTable(sqlSelectCouriers);
+            lvPackages.Items.Clear();
             foreach (DataRow row in dtCouriers.Rows)
             {
                 lvPackages.Items.Add(new CardPackage(Convert.ToInt32(row["PosiljkaID"].ToString()), row["Ime"].ToString(), Convert.ToInt32(row["Tezina"].ToString()), row["Preuzimanje"].ToString(), row["Dostava"].ToString(), "TODO"));
             }
+        }
+
+        private void btnDelete_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            CardPackage card = (CardPackage)lvPackages.SelectedItems[0];
+            int id = card.getID();
+            DatabaseConnection.DeleteById(id.ToString(), "PosiljkaID", "tblPosiljka");
+            ShowData();
         }
     }
 }

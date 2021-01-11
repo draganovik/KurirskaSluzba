@@ -28,9 +28,16 @@ namespace Kurirska_Služba.Views
         }
         public void ShowData()
         {
-            string sqlSelect = @"select Opis, Tezina, Cena from tblCenovnik";
+            string sqlSelect = @"select CenaID as 'Cena ID', Opis, Tezina, Cena from tblCenovnik";
             DataTable dataTable = DatabaseConnection.GetTable(sqlSelect);
             dgPrices.ItemsSource = dataTable.DefaultView;
+        }
+
+        private void btnDelete_Click(object sender, RoutedEventArgs e)
+        {
+            DataRowView id = (DataRowView)dgPrices.SelectedItems[0];
+            DatabaseConnection.DeleteById(id["Cena ID"].ToString(),"CenaID", "tblCenovnik");
+            ShowData();
         }
     }
 }
