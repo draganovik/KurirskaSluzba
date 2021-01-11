@@ -32,7 +32,7 @@
                     <Label Content="Istorija pošiljki"/>
                 </TabItem.Header>
                 <Grid>
-                    <views:PackageHistory/>
+                    <views:PackageHistory x:Name="viewPackageHistory"/>
                 </Grid>
             </TabItem>
             <TabItem IsSelected="True">
@@ -40,7 +40,7 @@
                     <Label Content="Pošiljke"/>
                 </TabItem.Header>
                 <Grid>
-                    <views:Packages/>
+                    <views:Packages x:Name="viewPackages"/>
                 </Grid>
             </TabItem>
             <TabItem>
@@ -48,7 +48,7 @@
                     <Label Content="Kuriri"/>
                 </TabItem.Header>
                 <Grid>
-                    <views:Couriers/>
+                    <views:Couriers x:Name="viewCouriers"/>
                 </Grid>
             </TabItem>
             <TabItem>
@@ -56,7 +56,7 @@
                     <Label Content="Klijenti"/>
                 </TabItem.Header>
                 <Grid>
-                    <views:Clients/>
+                    <views:Clients x:Name="viewClients"/>
                 </Grid>
             </TabItem>
             <TabItem>
@@ -64,7 +64,7 @@
                     <Label Content="Menadžeri"/>
                 </TabItem.Header>
                 <Grid>
-                    <views:Managers/>
+                    <views:Managers x:Name="viewManagers"/>
                 </Grid>
             </TabItem>
             <TabItem>
@@ -72,7 +72,7 @@
                     <Label Content="Cenovnik"/>
                 </TabItem.Header>
                 <Grid>
-                    <views:Prices/>
+                    <views:Prices x:Name="viewPrices"/>
                 </Grid>
             </TabItem>
         </TabControl>

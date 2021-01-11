@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,6 +20,7 @@ namespace Kurirska_Služba.Forms
     /// </summary>
     public partial class WindowClient : Window
     {
+        SqlConnection sqlConnection = new();
         public WindowClient()
         {
             InitializeComponent();
@@ -44,6 +46,54 @@ namespace Kurirska_Služba.Forms
                     break;
             }
 
+        }
+
+        private void btnApply_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                sqlConnection = DatabaseConnection.CreateConnection();
+                sqlConnection.Open();
+                SqlCommand command = new()
+                {
+                    Connection = sqlConnection
+                };
+                command.Parameters.Add("@Ime", System.Data.SqlDbType.NVarChar).Value = tbxName.Text;
+                command.Parameters.Add("@Prezime", System.Data.SqlDbType.NVarChar).Value = tbxSurname.Text;
+                command.Parameters.Add("@Telefon", System.Data.SqlDbType.NVarChar).Value = tbxPhoneNumber.Text;
+                command.Parameters.Add("@Grad", System.Data.SqlDbType.NVarChar).Value = tbxCity.Text;
+                command.Parameters.Add("@Adresa", System.Data.SqlDbType.NVarChar).Value = tbxAddress.Text;
+                command.Parameters.Add("@KIme", System.Data.SqlDbType.NVarChar).Value = tbxUsername.Text;
+                command.Parameters.Add("@KLozinka", System.Data.SqlDbType.NVarChar).Value = tbxPassword.Password;
+                command.CommandText = @"Insert into tblKlijent(Ime, Prezime, TelefonskiBroj, Grad, Adresa, KorisnickaLozinka, KorisnickoIme) values(@Ime, @Prezime, @Telefon, @Grad, @Adresa, @KLozinka, @KIme)";
+                command.ExecuteNonQuery();
+                command.Dispose();
+                MessageBox.Show("Operacija uspešno izvršena", "Promena uspešna", MessageBoxButton.OK, MessageBoxImage.Asterisk);
+                ResetInput();
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Promene nisu sačuvane zbog sledećeg problema u izvršavanju operacije: \n" + ex.Message, "Operacija je neuspešna", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                if (sqlConnection != null)
+                    sqlConnection.Close();
+            }
+
+
+        }
+
+        private void ResetInput()
+        {
+            tbxName.Text = "";
+            tbxSurname.Text = "";
+            tbxPhoneNumber.Text = "";
+            tbxCity.Text = "";
+            tbxAddress.Text = "";
+            tbxUsername.Text = "";
+            tbxPassword.Password = "";
         }
     }
 }

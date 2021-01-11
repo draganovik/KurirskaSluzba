@@ -10,7 +10,22 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Assets\box_large.png" />
+    <None Remove="Assets\box_small.png" />
+    <None Remove="Assets\letter_large.png" />
+    <None Remove="Assets\letter_small.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\letter_small.png" />
+    <Resource Include="Assets\letter_large.png" />
+    <Resource Include="Assets\box_small.png" />
+    <Resource Include="Assets\box_large.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
+    <PackageReference Include="System.Drawing.Common" Version="5.0.0" />
   </ItemGroup>
 
 </Project>

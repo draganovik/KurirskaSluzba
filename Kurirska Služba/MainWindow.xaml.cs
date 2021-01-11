@@ -47,6 +47,7 @@ namespace Kurirska_Služba
             {
                 MessageBox.Show("Nastao je problem pri postavci okruženja: \n" + ex.Message, "Neuspešno otvaranje prozora", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+            updateViews();
         }
 
         private void miNewPackage_Click(object sender, RoutedEventArgs e)
@@ -72,6 +73,15 @@ namespace Kurirska_Služba
         private void miNewPrice_Click(object sender, RoutedEventArgs e)
         {
             displayWindow(new WindowPrice("add") { Owner = this });
+        }
+        private void updateViews()
+        {
+            viewPackageHistory.ShowData();
+            viewPackages.ShowData();
+            viewCouriers.ShowData();
+            viewClients.ShowData();
+            viewManagers.ShowData();
+            viewPrices.ShowData();
         }
     }
 }

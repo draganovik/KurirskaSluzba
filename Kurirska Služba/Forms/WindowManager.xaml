@@ -14,7 +14,7 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Label Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Center">Ime</Label>
-                <TextBox Grid.Column="1"></TextBox>
+                <TextBox x:Name="tbxName" Grid.Column="1"></TextBox>
             </Grid>
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -22,7 +22,7 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Label Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Center">Prezime</Label>
-                <TextBox Grid.Column="1"></TextBox>
+                <TextBox x:Name="tbxSurname" Grid.Column="1"></TextBox>
             </Grid>
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -30,7 +30,7 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Label Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Center">Telefonski broj</Label>
-                <TextBox Grid.Column="1"></TextBox>
+                <TextBox x:Name="tbxPhoneNumber" Grid.Column="1"></TextBox>
             </Grid>
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -38,7 +38,7 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Label Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Center">Lokacija</Label>
-                <ComboBox Grid.Column="1"></ComboBox>
+                <TextBox x:Name="tbxLocation" Grid.Column="1"></TextBox>
             </Grid>
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -46,7 +46,7 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Label Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Center">Korisničko ime</Label>
-                <TextBox Grid.Column="1"></TextBox>
+                <TextBox x:Name="tbxUsername" Grid.Column="1"></TextBox>
             </Grid>
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -54,7 +54,7 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Label Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Center">Jednokratna lozinka</Label>
-                <PasswordBox Grid.Column="1"></PasswordBox>
+                <PasswordBox x:Name="tbxPassword" Grid.Column="1"></PasswordBox>
             </Grid>
             <Grid Margin="0,20,0,0">
                 <Grid.ColumnDefinitions>
@@ -62,7 +62,7 @@
                     <ColumnDefinition Width="3*"/>
                     <ColumnDefinition Width="1*"/>
                 </Grid.ColumnDefinitions>
-                <Button x:Name="btnApply" Grid.Column="1" Margin="2,2,2,2">Add</Button>
+                <Button x:Name="btnApply" Grid.Column="1" Margin="2,2,2,2" Click="btnApply_Click">Add</Button>
             </Grid>
         </StackPanel>
     </ScrollViewer>

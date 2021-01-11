@@ -28,36 +28,46 @@ namespace Kurirska_Služba.Forms
 
         private void EnvironmentSetup()
         {
-            sqlConnection = DatabaseConnection.CreateConnection();
-            sqlConnection.Open();
-            // Load Courier Combo Box items
-            string sqlCallCouriers = @"select KurirID, Ime + ' ' + Prezime + ' - ' + Lokacija as Kurir from tblKurir";
-            DataTable dtCouriers = new();
-            SqlDataAdapter sdaCouriers = new(sqlCallCouriers, sqlConnection);
-            sdaCouriers.Fill(dtCouriers);
-            cbxCourier.ItemsSource = dtCouriers.DefaultView;
-            // Load Sender Combo Box items
-            string sqlCallSender = @"select KlijentID, Ime + ' ' + Prezime + ' [@' + KorisnickoIme + ']' as Klijent from tblKlijent";
-            DataTable dtSender = new();
-            SqlDataAdapter sdaSender = new(sqlCallSender, sqlConnection);
-            sdaSender.Fill(dtSender);
-            cbxSender.ItemsSource = dtSender.DefaultView;
-            // Load Reciever Combo Box items
-            string sqlCallReceiver = @"select KlijentID, Ime + ' ' + Prezime + ' [@' + KorisnickoIme + ']' as Klijent from tblKlijent";
-            DataTable dtReceiver = new();
-            SqlDataAdapter sdaReceiver = new(sqlCallReceiver, sqlConnection);
-            sdaReceiver.Fill(dtReceiver);
-            cbxReceiver.ItemsSource = dtReceiver.DefaultView;
-            // Load Postage Combo Box items
-            string sqlCallPostage = @"select CenaID, Opis + ' - ' + CONVERT(nvarchar, Cena) + ' RSD' as Postarina from tblCenovnik";
-            DataTable dtPostage = new();
-            SqlDataAdapter sdaPostage = new(sqlCallPostage, sqlConnection);
-            sdaPostage.Fill(dtPostage);
-            cbxPostage.ItemsSource = dtPostage.DefaultView;
-            // Dispose and Close connection
-            sqlConnection.Dispose();
-            if (sqlConnection != null)
-                sqlConnection.Close();
+            try
+            {
+                sqlConnection = DatabaseConnection.CreateConnection();
+                sqlConnection.Open();
+                // Load Courier Combo Box items
+                string sqlCallCouriers = @"select KurirID, Ime + ' ' + Prezime + ' - ' + Lokacija as Kurir from tblKurir";
+                DataTable dtCouriers = new();
+                SqlDataAdapter sdaCouriers = new(sqlCallCouriers, sqlConnection);
+                sdaCouriers.Fill(dtCouriers);
+                cbxCourier.ItemsSource = dtCouriers.DefaultView;
+                // Load Sender Combo Box items
+                string sqlCallSender = @"select KlijentID, Ime + ' ' + Prezime + ' [@' + KorisnickoIme + ']' as Klijent from tblKlijent";
+                DataTable dtSender = new();
+                SqlDataAdapter sdaSender = new(sqlCallSender, sqlConnection);
+                sdaSender.Fill(dtSender);
+                cbxSender.ItemsSource = dtSender.DefaultView;
+                // Load Reciever Combo Box items
+                string sqlCallReceiver = @"select KlijentID, Ime + ' ' + Prezime + ' [@' + KorisnickoIme + ']' as Klijent from tblKlijent";
+                DataTable dtReceiver = new();
+                SqlDataAdapter sdaReceiver = new(sqlCallReceiver, sqlConnection);
+                sdaReceiver.Fill(dtReceiver);
+                cbxReceiver.ItemsSource = dtReceiver.DefaultView;
+                // Load Postage Combo Box items
+                string sqlCallPostage = @"select CenaID, Opis + ' - ' + CONVERT(nvarchar, Cena) + ' RSD' as Postarina from tblCenovnik";
+                DataTable dtPostage = new();
+                SqlDataAdapter sdaPostage = new(sqlCallPostage, sqlConnection);
+                sdaPostage.Fill(dtPostage);
+                cbxPostage.ItemsSource = dtPostage.DefaultView;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Nije moguće povezati se sa bazom podataka: " + ex.Message, "Problem sa bazom podataka");
+            }
+            finally
+            {
+                // Dispose and Close connection
+                sqlConnection.Dispose();
+                if (sqlConnection != null)
+                    sqlConnection.Close();
+            }
         }
         private void setType(String type)
         {

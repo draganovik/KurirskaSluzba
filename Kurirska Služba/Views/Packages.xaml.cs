@@ -47,11 +47,11 @@ namespace Kurirska_Služba.Views
         public void ShowData()
         {
             // TODO: Implement latest package status in the list UI
-            string sqlSelectCouriers = @"select PosiljkaID, '#' + CONVERT(nvarchar, PosiljkaID) + ' - ' + Naziv as Ime, GradPreuzimanja + ', ' + AdresaPreuzimanja as Preuzimanje, GradDostave + ', ' + AdresaDostave as Dostava from tblPosiljka";
+            string sqlSelectCouriers = @"select PosiljkaID, '#' + CONVERT(nvarchar, PosiljkaID) + ' - ' + Naziv as Ime, Tezina, GradPreuzimanja + ', ' + AdresaPreuzimanja as Preuzimanje, GradDostave + ', ' + AdresaDostave as Dostava from tblPosiljka";
             DataTable dtCouriers = DatabaseConnection.GetTable(sqlSelectCouriers);
             foreach (DataRow row in dtCouriers.Rows)
             {
-                lvPackages.Items.Add(new CardPackage(Convert.ToInt32(row["PosiljkaID"].ToString()), row["Ime"].ToString(), row["Preuzimanje"].ToString(), row["Dostava"].ToString(), "TODO"));
+                lvPackages.Items.Add(new CardPackage(Convert.ToInt32(row["PosiljkaID"].ToString()), row["Ime"].ToString(), Convert.ToInt32(row["Tezina"].ToString()), row["Preuzimanje"].ToString(), row["Dostava"].ToString(), "TODO"));
             }
         }
     }

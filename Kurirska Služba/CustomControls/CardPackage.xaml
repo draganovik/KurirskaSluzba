@@ -11,7 +11,7 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="100"/>
         </Grid.ColumnDefinitions>
-        <Border CornerRadius="2" Grid.Column="0" Width="60" Height="60"  VerticalAlignment="Center" HorizontalAlignment="Center" Background="{DynamicResource {x:Static SystemColors.ActiveCaptionBrushKey}}"/>
+        <Border x:Name="brdImage" CornerRadius="2" Grid.Column="0" RenderOptions.BitmapScalingMode="HighQuality" Width="48" Height="48"  VerticalAlignment="Center" HorizontalAlignment="Center" Background="#FF99B4D1"/>
         <StackPanel Grid.Column="1" VerticalAlignment="Center">
             <Label x:Name="lbName" FontSize="16" FontWeight="Bold" Padding="2,0,0,2">iPhone 12 Pro Max</Label>
             <StackPanel Orientation="Horizontal">
