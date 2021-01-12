@@ -28,7 +28,7 @@ namespace Kurirska_Služba.Views
         }
         public void ShowData()
         {
-            string sqlSelect = @"select '@' + KorisnickoIme as 'Korisničko ime', Ime, Prezime, Lokacija, TelefonskiBroj as 'Broj telefona' from tblMenadzer";
+            string sqlSelect = @"select '@' + KorisnickoIme as 'Korisničko ime', Ime + ' ' + Prezime as Ime, Lokacija, TelefonskiBroj as 'Broj telefona' from tblMenadzer";
             DataTable dataTable = DatabaseConnection.GetTable(sqlSelect);
             dgManagers.ItemsSource = dataTable.DefaultView;
         }

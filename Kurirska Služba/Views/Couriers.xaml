@@ -11,41 +11,11 @@
             <RowDefinition Height="40"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="6*"/>
-            <ColumnDefinition Width="12*"/>
-        </Grid.ColumnDefinitions>
-        <StackPanel Grid.Row="0" Grid.Column="2" Orientation="Horizontal" FlowDirection="RightToLeft">
+        <StackPanel Grid.Row="0" Orientation="Horizontal" FlowDirection="RightToLeft">
             <Button>Izmeni</Button>
             <Button>Obriši kurira</Button>
         </StackPanel>
-        <DataGrid x:Name="dgCouriers" ColumnWidth="*" Grid.RowSpan="2" SelectionMode="Single" SelectionUnit="FullRow" IsReadOnly="True" AlternatingRowBackground="LightGray" CanUserAddRows="False" >
+        <DataGrid x:Name="dgCouriers" ColumnWidth="*" Grid.Row="2" SelectionMode="Single" SelectionUnit="FullRow" IsReadOnly="True" AlternationCount="2" CanUserAddRows="False" >
         </DataGrid>
-        <DockPanel Grid.Column="1" Grid.Row="1">
-            
-            <Grid Margin="8,8,8,0" Background="Transparent" MaxWidth="900" VerticalAlignment="Stretch">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="2*"/>
-                    <ColumnDefinition Width="2*"/>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="20"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-                <StackPanel Margin="0,0,0,20" Grid.Row="0" Grid.Column="0" MaxWidth="500" HorizontalAlignment="Stretch">
-                    <Label FontSize="20" FontWeight="Bold" Padding="6,0">Marko Petrov</Label>
-                    <Label FontSize="16" FontWeight="Light" Padding="6,0">@petrovm</Label>
-                </StackPanel>
-                <Label Grid.Row="1" Grid.Column="0" Content="Broj telefona" VerticalAlignment="Center"/>
-                <TextBox IsReadOnly="True"  Grid.Row="1" Grid.Column="1" VerticalAlignment="Center">+381649587009</TextBox>
-                <Label  Grid.Row="2" Grid.Column="0" Content="Lokacija" VerticalAlignment="Center"/>
-                <TextBox IsReadOnly="True" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center">Novi Sad</TextBox>
-                <Label FontSize="14" Padding="6" Grid.Row="4" Grid.ColumnSpan="2" Margin="0,6,0,0">Dodeljeni paketi</Label>
-                <local:Packages Grid.Row="4" Grid.ColumnSpan="2" ></local:Packages>
-            </Grid>
-        </DockPanel>
     </Grid>
 </UserControl>

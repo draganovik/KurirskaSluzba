@@ -31,8 +31,7 @@ namespace Kurirska_Služba.Views
             string sqlSelect = @"select
             tblStanjePosiljke.Vreme,
             SVP.NazivStanja as 'Ime trenutnog procesa',
-            '#' + CONVERT(nvarchar,posiljka.PosiljkaID) as 'ID posiljke',
-            Posiljka.Naziv as 'Naziv posiljke',
+            '#' + CONVERT(nvarchar,posiljka.PosiljkaID) +' - '+ Posiljka.Naziv as 'Ime pošiljke',
             ISNULL(Komentar, 'Nema') as Komentar
             from tblStanjePosiljke
                 join tblPosiljka as Posiljka on tblStanjePosiljke.PosiljkaID = Posiljka.PosiljkaID
