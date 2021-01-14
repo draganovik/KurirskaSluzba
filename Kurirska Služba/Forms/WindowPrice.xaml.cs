@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
@@ -21,15 +22,48 @@ namespace Kurirska_Služba.Forms
     public partial class WindowPrice : Window
     {
         SqlConnection sqlConnection = new();
+        bool isEdit = false;
+        int selectedID;
         public WindowPrice()
         {
             InitializeComponent();
             tbxType.Focus();
-            sqlConnection = DatabaseConnection.CreateConnection();
+            setType("add");
         }
-        public WindowPrice(String windowType) : this()
+        public WindowPrice(int selectedID) : this()
         {
-            setType(windowType);
+            setType("edit");
+            try
+            {
+                sqlConnection = DatabaseConnection.CreateConnection();
+                sqlConnection.Open();
+                SqlCommand command = new SqlCommand
+                {
+                    Connection = sqlConnection
+                };
+                command.Parameters.Add("@id", SqlDbType.Int).Value = selectedID;
+                this.selectedID = selectedID;
+                command.CommandText = @"Select * from tblCenovnik where CenaID= @id";
+                SqlDataReader reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    tbxPrice.Text = reader["Cena"].ToString();
+                    tbxType.Text = reader["Opis"].ToString();
+                    tbxWeight.Text = reader["Tezina"].ToString();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Nije moguće očitati vrednosti elementa " + ex.Message, "Izmena nije moguća", MessageBoxButton.OK, MessageBoxImage.Error);
+                this.Close();
+            }
+            finally
+            {
+                if (sqlConnection != null)
+                {
+                    sqlConnection.Close();
+                }
+            }
         }
 
         private void setType(String type)
@@ -39,10 +73,12 @@ namespace Kurirska_Služba.Forms
                 case "edit":
                     this.Title = "Izmena cene";
                     btnApply.Content = "Sačuvaj";
+                    isEdit = true;
                     break;
                 case "add":
                     this.Title = "Dodavanje nove cene";
                     btnApply.Content = "Dodaj cenu";
+                    isEdit = false;
                     break;
             }
 
@@ -52,6 +88,7 @@ namespace Kurirska_Služba.Forms
         {
             try
             {
+                sqlConnection = DatabaseConnection.CreateConnection();
                 sqlConnection.Open();
                 SqlCommand command = new()
                 {
@@ -60,10 +97,21 @@ namespace Kurirska_Služba.Forms
                 command.Parameters.Add("@Tezina", System.Data.SqlDbType.Int).Value = tbxWeight.Text;
                 command.Parameters.Add("@Cena", System.Data.SqlDbType.Money).Value = tbxPrice.Text;
                 command.Parameters.Add("@Opis", System.Data.SqlDbType.NVarChar).Value = tbxType.Text;
-                command.CommandText = @"Insert into tblCenovnik(Opis,Tezina,Cena) values(@Opis, @Tezina, @Cena)";
+                if (isEdit)
+                {
+                    command.Parameters.Add("@id", System.Data.SqlDbType.NVarChar).Value = selectedID;
+                    command.CommandText = @"Update tblCenovnik set Opis = @Opis, Cena = @Cena, Tezina = @Tezina where CenaID = @id";
+                }
+                else
+                {
+                    command.CommandText = @"Insert into tblCenovnik(Opis,Tezina,Cena) values(@Opis, @Tezina, @Cena)";
+                }
                 command.ExecuteNonQuery();
                 command.Dispose();
-                MessageBox.Show("Operacija uspešno izvršena", "Promena uspešna", MessageBoxButton.OK, MessageBoxImage.Asterisk);
+                if (!isEdit)
+                {
+                    MessageBox.Show("Operacija uspešno izvršena", "Promena uspešna", MessageBoxButton.OK, MessageBoxImage.Asterisk);
+                }
                 ResetInput();
 
             }
@@ -75,6 +123,8 @@ namespace Kurirska_Služba.Forms
             {
                 if (sqlConnection != null)
                     sqlConnection.Close();
+                if (isEdit)
+                    this.Close();
             }
 
 

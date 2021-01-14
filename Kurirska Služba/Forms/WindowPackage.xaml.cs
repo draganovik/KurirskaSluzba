@@ -2,6 +2,8 @@
 using System.Data;
 using System.Data.SqlClient;
 using System.Globalization;
+using System.IO;
+using System.Text;
 using System.Windows;
 using System.Windows.Documents;
 
@@ -13,17 +15,61 @@ namespace Kurirska_Služba.Forms
     public partial class WindowPackage : Window
     {
         SqlConnection sqlConnection = new();
+        bool isEdit = false;
+        int selectedID;
         public WindowPackage()
         {
             InitializeComponent();
             tbxName.Focus();
-            sqlConnection = DatabaseConnection.CreateConnection();
             EnvironmentSetup();
+            setType("add");
         }
 
-        public WindowPackage(String windowType) : this()
+        public WindowPackage(int selectedID) : this()
         {
-            setType(windowType);
+            setType("edit");
+            try
+            {
+                sqlConnection = DatabaseConnection.CreateConnection();
+                sqlConnection.Open();
+                SqlCommand command = new SqlCommand
+                {
+                    Connection = sqlConnection
+                };
+                command.Parameters.Add("@id", SqlDbType.Int).Value = selectedID;
+                this.selectedID = selectedID;
+                command.CommandText = @"Select * from tblPosiljka where PosiljkaID= @id";
+                SqlDataReader reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    tbxName.Text = reader["Naziv"].ToString();
+                    tbxWeight.Text = reader["Tezina"].ToString();
+                    cbxCourier.SelectedValue = reader["DodeljenKurirID"];
+                    cbxSender.SelectedValue = reader["DodeljenPosiljalacID"];
+                    cbxReceiver.SelectedValue = reader["DodeljenPrimalacID"];
+                    tbxPickupCity.Text = reader["GradPreuzimanja"].ToString();
+                    tbxPickupAddress.Text = reader["AdresaPreuzimanja"].ToString();
+                    tbxDropoffCity.Text = reader["GradDostave"].ToString();
+                    tbxDropoffAddress.Text = reader["AdresaDostave"].ToString();
+                    cbxPostage.SelectedValue = reader["PostarinaID"];
+                    tbxRansom.Text = reader["DoplataZaPaket"].ToString();
+                    dpDropoffDate.SelectedDate = (DateTime)reader["VremeDostave"];
+                    rtbComment.SelectAll();
+                    rtbComment.Selection.Text = reader["Napomena"].ToString();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Nije moguće očitati vrednosti elementa " + ex.Message, "Izmena nije moguća", MessageBoxButton.OK, MessageBoxImage.Error);
+                this.Close();
+            }
+            finally
+            {
+                if (sqlConnection != null)
+                {
+                    sqlConnection.Close();
+                }
+            }
         }
 
         private void EnvironmentSetup()
@@ -76,10 +122,12 @@ namespace Kurirska_Služba.Forms
                 case "edit":
                     this.Title = "Izmena paketa";
                     btnApply.Content = "Sačuvaj";
+                    isEdit = true;
                     break;
                 case "add":
                     this.Title = "Dodavanje novog paketa";
                     btnApply.Content = "Napravi paket";
+                    isEdit = false;
                     break;
             }
         }
@@ -106,12 +154,34 @@ namespace Kurirska_Služba.Forms
                 command.Parameters.Add("@GradDostave", System.Data.SqlDbType.NVarChar).Value = tbxDropoffCity.Text;
                 command.Parameters.Add("@AdresaDostave", System.Data.SqlDbType.NVarChar).Value = tbxDropoffAddress.Text;
                 command.Parameters.Add("@Postarina", System.Data.SqlDbType.Int).Value = cbxPostage.SelectedValue;
-                command.Parameters.Add("@Doplata", System.Data.SqlDbType.Money).Value = tbxRansom.Text == "" ? 0 : tbxRansom.Text;
+                command.Parameters.Add("@Doplata", System.Data.SqlDbType.Money).Value = Convert.ToDouble(tbxRansom.Text == "" ? 0 : tbxRansom.Text);
                 // TODO: Implement DateTime Picker
                 command.Parameters.Add("@VremeDostave", System.Data.SqlDbType.DateTime).Value = ((DateTime)dpDropoffDate.SelectedDate).ToString("yyyy-MM-dd", CultureInfo.CurrentCulture);
                 command.Parameters.Add("@Napomena", System.Data.SqlDbType.NVarChar).Value = new TextRange(rtbComment.Document.ContentStart, rtbComment.Document.ContentEnd).Text;
-                command.CommandText =
-                    @"insert tblPosiljka (
+                if (isEdit)
+                {
+                    command.Parameters.Add("@id", System.Data.SqlDbType.NVarChar).Value = selectedID;
+                    command.CommandText = @"Update tblPosiljka set 
+                        Naziv = @Naziv,
+                        Tezina = @Tezina,
+                        DodeljenMenadzerID = @Menadzer,
+                        DodeljenPosiljalacID = @Posiljalac,
+                        DodeljenPrimalacID = @Primalac,
+                        DodeljenKurirID = @Kurir,
+                        GradPreuzimanja = @GradPreuzimanja,
+                        AdresaPreuzimanja = @AdresaPreuzimanja,
+                        GradDostave = @GradDostave,
+                        AdresaDostave = @AdresaDostave,
+                        VremeDostave = @VremeDostave,
+                        PostarinaID = @Postarina,
+                        DoplataZaPaket = @Doplata,
+                        Napomena = @Napomena
+                        where PosiljkaID = @id";
+                }
+                else
+                {
+                    command.CommandText =
+                        @"insert tblPosiljka (
                         Naziv,
                         Tezina,
                         DodeljenMenadzerID,
@@ -127,14 +197,28 @@ namespace Kurirska_Služba.Forms
                         DoplataZaPaket,
                         Napomena
                     )values(
-                        @Naziv, @Tezina, @Menadzer, @Posiljalac,
-                        @Primalac, @Kurir, @GradPreuzimanja,
-                        @AdresaPreuzimanja, @GradDostave, @AdresaDostave,
-                        @VremeDostave, @Postarina, @Doplata, @Napomena
+                        @Naziv,
+                        @Tezina,
+                        @Menadzer,
+                        @Posiljalac,
+                        @Primalac,
+                        @Kurir,
+                        @GradPreuzimanja,
+                        @AdresaPreuzimanja,
+                        @GradDostave,
+                        @AdresaDostave,
+                        @VremeDostave,
+                        @Postarina,
+                        @Doplata,
+                        @Napomena
                     )";
+                }
                 command.ExecuteNonQuery();
                 command.Dispose();
-                MessageBox.Show("Operacija uspešno izvršena", "Promena uspešna", MessageBoxButton.OK, MessageBoxImage.Asterisk);
+                if (!isEdit)
+                {
+                    MessageBox.Show("Operacija uspešno izvršena", "Promena uspešna", MessageBoxButton.OK, MessageBoxImage.Asterisk);
+                }
                 ResetInput();
 
             }
@@ -146,6 +230,8 @@ namespace Kurirska_Služba.Forms
             {
                 if (sqlConnection != null)
                     sqlConnection.Close();
+                if (isEdit)
+                    this.Close();
             }
         }
 

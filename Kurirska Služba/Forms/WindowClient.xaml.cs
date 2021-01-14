@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
@@ -21,15 +22,55 @@ namespace Kurirska_Služba.Forms
     public partial class WindowClient : Window
     {
         SqlConnection sqlConnection = new();
+        bool isEdit = false;
+        string selectedID;
         public WindowClient()
         {
             InitializeComponent();
+            setType("add");
+
         }
 
-        public WindowClient(String windowType)
+        public WindowClient(String selectedID)
         {
             InitializeComponent();
-            setType(windowType);
+            setType("edit");
+            tbxPassword.IsEnabled = false;
+            try
+            {
+                sqlConnection = DatabaseConnection.CreateConnection();
+                sqlConnection.Open();
+                SqlCommand command = new SqlCommand
+                {
+                    Connection = sqlConnection
+                };
+                command.Parameters.Add("@id", SqlDbType.NVarChar).Value = selectedID;
+                this.selectedID = selectedID;
+                command.CommandText = @"Select * from tblKlijent where KorisnickoIme= @id";
+                SqlDataReader reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    tbxName.Text = reader["Ime"].ToString();
+                    tbxSurname.Text = reader["Prezime"].ToString();
+                    tbxPhoneNumber.Text = reader["TelefonskiBroj"].ToString();
+                    tbxCity.Text = reader["Grad"].ToString();
+                    tbxAddress.Text = reader["Adresa"].ToString();
+                    tbxUsername.Text = reader["KorisnickoIme"].ToString();
+                    tbxPassword.Password = "";
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Nije moguće očitati vrednosti elementa " + ex.Message, "Izmena nije moguća", MessageBoxButton.OK, MessageBoxImage.Error);
+                this.Close();
+            }
+            finally
+            {
+                if (sqlConnection != null)
+                {
+                    sqlConnection.Close();
+                }
+            }
         }
 
         private void setType(String type)
@@ -39,10 +80,12 @@ namespace Kurirska_Služba.Forms
                 case "edit":
                     this.Title = "Izmena podataka klijenta";
                     btnApply.Content = "Sačuvaj";
+                    isEdit = true;
                     break;
                 case "add":
                     this.Title = "Dodavanje novog klijenta";
                     btnApply.Content = "Napravi nalog";
+                    isEdit = false;
                     break;
             }
 
@@ -64,11 +107,22 @@ namespace Kurirska_Služba.Forms
                 command.Parameters.Add("@Grad", System.Data.SqlDbType.NVarChar).Value = tbxCity.Text;
                 command.Parameters.Add("@Adresa", System.Data.SqlDbType.NVarChar).Value = tbxAddress.Text;
                 command.Parameters.Add("@KIme", System.Data.SqlDbType.NVarChar).Value = tbxUsername.Text;
-                command.Parameters.Add("@KLozinka", System.Data.SqlDbType.NVarChar).Value = tbxPassword.Password;
-                command.CommandText = @"Insert into tblKlijent(Ime, Prezime, TelefonskiBroj, Grad, Adresa, KorisnickaLozinka, KorisnickoIme) values(@Ime, @Prezime, @Telefon, @Grad, @Adresa, @KLozinka, @KIme)";
+                if (isEdit)
+                {
+                    command.Parameters.Add("@ImeID", System.Data.SqlDbType.NVarChar).Value = this.selectedID;
+                    command.CommandText = @"Update tblKlijent set Ime = @Ime, Prezime = @Prezime, TelefonskiBroj = @Telefon, Grad = @Grad, Adresa = @Adresa, KorisnickoIme = @KIme where KorisnickoIme = @ImeID";
+                }
+                else
+                {
+                    command.Parameters.Add("@KLozinka", System.Data.SqlDbType.NVarChar).Value = PasswordHasher.Encode(tbxPassword.Password);
+                    command.CommandText = @"Insert into tblKlijent(Ime, Prezime, TelefonskiBroj, Grad, Adresa, KorisnickaLozinka, KorisnickoIme) values(@Ime, @Prezime, @Telefon, @Grad, @Adresa, @KLozinka, @KIme)";
+                }
                 command.ExecuteNonQuery();
                 command.Dispose();
-                MessageBox.Show("Operacija uspešno izvršena", "Promena uspešna", MessageBoxButton.OK, MessageBoxImage.Asterisk);
+                if (!isEdit)
+                {
+                    MessageBox.Show("Operacija uspešno izvršena", "Promena uspešna", MessageBoxButton.OK, MessageBoxImage.Asterisk);
+                }
                 ResetInput();
 
             }
@@ -80,9 +134,9 @@ namespace Kurirska_Služba.Forms
             {
                 if (sqlConnection != null)
                     sqlConnection.Close();
+                if (isEdit)
+                    this.Close();
             }
-
-
         }
 
         private void ResetInput()

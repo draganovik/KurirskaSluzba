@@ -11,10 +11,11 @@
             <RowDefinition Height="40"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <DataGrid ColumnWidth="*" x:Name="dgManagers" Grid.Row="1" SelectionMode="Single" SelectionUnit="FullRow" IsReadOnly="True" AlternationCount="2" CanUserAddRows="False" >
+        <DataGrid ColumnWidth="*" x:Name="dgManagers" Grid.Row="1" SelectionMode="Single" SelectionUnit="FullRow" IsReadOnly="True" AlternationCount="2" CanUserAddRows="False" SelectionChanged="dgManagers_SelectionChanged" >
         </DataGrid>
-        <StackPanel Grid.Row="0" Orientation="Horizontal" FlowDirection="RightToLeft">
-            <Button>Izmeni</Button>
+        <StackPanel x:Name="spControls" Grid.Row="0" Orientation="Horizontal" FlowDirection="RightToLeft">
+            <Button x:Name="btnChange" Click="btnChange_Click" IsEnabled="False">Izmeni</Button>
+            <Button x:Name="btnDelete" Click="btnDelete_Click" UseLayoutRounding="False" IsEnabled="False">Obriši</Button>
         </StackPanel>
     </Grid>
 </UserControl>

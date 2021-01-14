@@ -52,27 +52,27 @@ namespace Kurirska_Služba
 
         private void miNewPackage_Click(object sender, RoutedEventArgs e)
         {
-            displayWindow(new WindowPackage("add") { Owner = this });
+            displayWindow(new WindowPackage() { Owner = this });
         }
 
         private void miNewClient_Click(object sender, RoutedEventArgs e)
         {
-            displayWindow(new WindowClient("add") { Owner = this });
+            displayWindow(new WindowClient() { Owner = this });
         }
 
         private void miNewCourier_Click(object sender, RoutedEventArgs e)
         {
-            displayWindow(new WindowCourier("add") { Owner = this });
+            displayWindow(new WindowCourier() { Owner = this });
         }
 
         private void miNewMenadžer_Click(object sender, RoutedEventArgs e)
         {
-            displayWindow(new WindowManager("add") { Owner = this });
+            displayWindow(new WindowManager() { Owner = this });
         }
 
         private void miNewPrice_Click(object sender, RoutedEventArgs e)
         {
-            displayWindow(new WindowPrice("add") { Owner = this });
+            displayWindow(new WindowPrice() { Owner = this });
         }
         private void updateViews()
         {
