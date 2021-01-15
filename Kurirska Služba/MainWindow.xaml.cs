@@ -3,6 +3,7 @@ using System;
 using System.ComponentModel;
 using System.Reflection;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace Kurirska_Služba
 {
@@ -82,6 +83,14 @@ namespace Kurirska_Služba
             viewClients.ShowData();
             viewManagers.ShowData();
             viewPrices.ShowData();
+        }
+
+        private void tcMainContent_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            if (e.Source is TabControl)
+            {
+                updateViews();
+            }
         }
     }
 }

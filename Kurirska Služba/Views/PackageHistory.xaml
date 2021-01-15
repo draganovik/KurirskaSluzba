@@ -11,11 +11,12 @@
             <RowDefinition Height="40"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <StackPanel Grid.Row="0" Orientation="Horizontal" FlowDirection="RightToLeft">
-            <Button>Prikaži paket</Button>
-            <Button>Izmeni</Button>
+        <StackPanel x:Name="spControls" Grid.Row="0" Orientation="Horizontal" FlowDirection="RightToLeft">
+            <Button x:Name="btnShowPackage" Click="btnShowPackage_Click" IsEnabled="False">Prikaži paket</Button>
         </StackPanel>
-        <DataGrid ColumnWidth="*" x:Name="dgPackageHistory" Grid.Row="1" SelectionMode="Single" SelectionUnit="FullRow" IsReadOnly="True" AlternationCount="2" CanUserAddRows="False" >
-        </DataGrid>
+        <ScrollViewer x:Name="svContainer" Grid.Row="1" HorizontalScrollBarVisibility="Disabled" CanContentScroll="False" PreviewMouseWheel="svContainer_PreviewMouseWheel">
+            <DataGrid ColumnWidth="*" x:Name="dgPackageHistory" SelectionMode="Single" SelectionUnit="FullRow" IsReadOnly="True" AlternationCount="2" CanUserAddRows="False" SelectionChanged="dgPackageHistory_SelectionChanged" >
+            </DataGrid>
+        </ScrollViewer>
     </Grid>
 </UserControl>

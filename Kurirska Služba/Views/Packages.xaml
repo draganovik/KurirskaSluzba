@@ -11,12 +11,12 @@
             <RowDefinition Height="40"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <ScrollViewer Grid.Row="1" x:Name="svContainer" VerticalScrollBarVisibility="Auto" CanContentScroll="True" Background="Transparent" HorizontalContentAlignment="Stretch" PreviewMouseWheel="svContainer_PreviewMouseWheel">
+        <ScrollViewer Grid.Row="1" x:Name="svContainer" VerticalScrollBarVisibility="Auto" CanContentScroll="False" Background="Transparent" HorizontalContentAlignment="Stretch" PreviewMouseWheel="svContainer_PreviewMouseWheel">
             <ListView MaxWidth="900" x:Name="lvPackages" BorderThickness="0" Background="Transparent" HorizontalContentAlignment="Stretch" SelectionMode="Single" AlternationCount="2" SelectionChanged="lvPackages_SelectionChanged">
             </ListView>
         </ScrollViewer>
         <StackPanel x:Name="spControls" Grid.Row="0" Orientation="Horizontal" FlowDirection="RightToLeft">
-            <Button IsEnabled="False">Upravljaj pošiljkom</Button>
+            <Button x:Name="btnManage" IsEnabled="False" Click="btnManage_Click">Upravljaj pošiljkom</Button>
             <Button x:Name="btnChange" IsEnabled="False" Click="btnChange_Click">Izmeni</Button>
             <Button x:Name="btnDelete" IsEnabled="False" Click="btnDelete_Click">Obriši</Button>
         </StackPanel>

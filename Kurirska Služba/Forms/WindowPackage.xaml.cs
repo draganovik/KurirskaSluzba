@@ -4,6 +4,7 @@ using System.Data.SqlClient;
 using System.Globalization;
 using System.IO;
 using System.Text;
+using System.Threading;
 using System.Windows;
 using System.Windows.Documents;
 
@@ -52,7 +53,7 @@ namespace Kurirska_Služba.Forms
                     tbxDropoffCity.Text = reader["GradDostave"].ToString();
                     tbxDropoffAddress.Text = reader["AdresaDostave"].ToString();
                     cbxPostage.SelectedValue = reader["PostarinaID"];
-                    tbxRansom.Text = reader["DoplataZaPaket"].ToString();
+                    tbxRansom.Text = reader["DoplataZaPaket"].ToString()[0..^2];
                     dpDropoffDate.SelectedDate = (DateTime)reader["VremeDostave"];
                     rtbComment.SelectAll();
                     rtbComment.Selection.Text = reader["Napomena"].ToString();
@@ -134,6 +135,7 @@ namespace Kurirska_Služba.Forms
 
         private void btnApply_Click(object sender, RoutedEventArgs e)
         {
+            bool isValid = false;
             try
             {
                 sqlConnection = DatabaseConnection.CreateConnection();
@@ -160,7 +162,7 @@ namespace Kurirska_Služba.Forms
                 command.Parameters.Add("@Napomena", System.Data.SqlDbType.NVarChar).Value = new TextRange(rtbComment.Document.ContentStart, rtbComment.Document.ContentEnd).Text;
                 if (isEdit)
                 {
-                    command.Parameters.Add("@id", System.Data.SqlDbType.NVarChar).Value = selectedID;
+                    command.Parameters.Add("@id", System.Data.SqlDbType.Int).Value = selectedID;
                     command.CommandText = @"Update tblPosiljka set 
                         Naziv = @Naziv,
                         Tezina = @Tezina,
@@ -218,6 +220,7 @@ namespace Kurirska_Služba.Forms
                 if (!isEdit)
                 {
                     MessageBox.Show("Operacija uspešno izvršena", "Promena uspešna", MessageBoxButton.OK, MessageBoxImage.Asterisk);
+                    isValid = true;
                 }
                 ResetInput();
 
@@ -229,10 +232,93 @@ namespace Kurirska_Služba.Forms
             finally
             {
                 if (sqlConnection != null)
+                {
                     sqlConnection.Close();
+                    if (isValid)
+                    {
+                        Thread.Sleep(200);
+                        this.selectedID = getLatestPackageID();
+                        if (selectedID > -1)
+                            createInitialPackageState();
+                    }
+                }
                 if (isEdit)
                     this.Close();
             }
+        }
+
+        private void createInitialPackageState()
+        {
+            try
+            {
+                sqlConnection = DatabaseConnection.CreateConnection();
+                sqlConnection.Open();
+                SqlCommand command = new()
+                {
+                    Connection = sqlConnection
+                };
+                command.Parameters.Add("@Posiljka", System.Data.SqlDbType.Int).Value = selectedID;
+                command.Parameters.Add("@Vreme", System.Data.SqlDbType.DateTime).Value = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.CurrentCulture);
+                command.Parameters.Add("@Stanje", System.Data.SqlDbType.Int).Value = 1;
+                command.Parameters.Add("@Komentar", System.Data.SqlDbType.NVarChar).Value = "Paket je kreiran";
+                command.CommandText =
+                        @"insert tblStanjePosiljke (
+                        PosiljkaID,
+                        VrstaStanjaID,
+                        Komentar,
+                        Vreme
+                    )values(
+                        @Posiljka,
+                        @Stanje,
+                        @Komentar,
+                        @Vreme
+                    )";
+                command.ExecuteNonQuery();
+                command.Dispose();
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Promene nisu sačuvane zbog sledećeg problema u izvršavanju operacije: \n" + ex.Message, "Operacija je neuspešna", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                if (sqlConnection != null)
+                    sqlConnection.Close();
+                this.Close();
+            }
+        }
+
+        private int getLatestPackageID()
+        {
+            int id = -1;
+            try
+            {
+                sqlConnection = DatabaseConnection.CreateConnection();
+                sqlConnection.Open();
+                SqlCommand command = new SqlCommand
+                {
+                    Connection = sqlConnection
+                };
+                sqlConnection = DatabaseConnection.CreateConnection();
+                sqlConnection.Open();
+                command.CommandText = @"SELECT MAX(PosiljkaID) FROM tblPosiljka";
+                SqlDataReader reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    id = Convert.ToInt32(reader[0]);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Promene nisu sačuvane zbog sledećeg problema u izvršavanju operacije: \n" + ex.Message, "Operacija je neuspešna", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                if (sqlConnection != null)
+                    sqlConnection.Close();
+            }
+            return id;
         }
 
         private void ResetInput()

@@ -37,8 +37,13 @@ namespace Kurirska_Služba.Views
             lvPackages.Items.Clear();
             foreach (DataRow row in dtCouriers.Rows)
             {
-                lvPackages.Items.Add(new CardPackage(Convert.ToInt32(row["PosiljkaID"].ToString()), row["Ime"].ToString(), Convert.ToInt32(row["Tezina"].ToString()), row["Preuzimanje"].ToString(), row["Dostava"].ToString(), "TODO"));
+                lvPackages.Items.Insert(0, new CardPackage(Convert.ToInt32(row["PosiljkaID"].ToString()), row["Ime"].ToString(), Convert.ToInt32(row["Tezina"].ToString()), row["Preuzimanje"].ToString(), row["Dostava"].ToString(), "TODO"));
             }
+        }
+
+        private void eraceStateHistory(int packageID)
+        {
+            DatabaseConnection.DeleteByValue(packageID.ToString(), "PosiljkaID", "tblStanjePosiljke");
         }
         private void btnChange_Click(object sender, System.Windows.RoutedEventArgs e)
         {
@@ -59,7 +64,8 @@ namespace Kurirska_Služba.Views
         {
             CardPackage card = (CardPackage)lvPackages.SelectedItems[0];
             int id = card.getID();
-            DatabaseConnection.DeleteById(id.ToString(), "PosiljkaID", "tblPosiljka");
+            eraceStateHistory(id);
+            DatabaseConnection.DeleteByIdUnsafe(id.ToString(), "PosiljkaID", "tblPosiljka");
             ShowData();
         }
 
@@ -78,6 +84,21 @@ namespace Kurirska_Služba.Views
                 {
                     button.IsEnabled = true;
                 }
+            }
+        }
+
+        private void btnManage_Click(object sender, RoutedEventArgs e)
+        {
+            if (lvPackages.SelectedItem != null)
+            {
+                CardPackage selectedPackage = (CardPackage)lvPackages.SelectedItems[0];
+                WindowManagePackage window = new WindowManagePackage(selectedPackage.getID()) { Owner = Application.Current.MainWindow };
+                window.ShowDialog();
+                ShowData();
+            }
+            else
+            {
+                MessageBox.Show("Morate selektovati paket iz liste", "Paket nije izabran", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
     }

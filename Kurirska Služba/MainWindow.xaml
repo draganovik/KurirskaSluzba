@@ -7,11 +7,6 @@
         Title=" Kurirska Služba" MinHeight="520" MinWidth="860" Height="520" Width="860" WindowStartupLocation="CenterScreen">
     <DockPanel>
         <Menu DockPanel.Dock="Top" IsMainMenu="True" FlowDirection="LeftToRight">
-            <MenuItem Header="Opcije">
-                <MenuItem Header="Promeni server"/>
-                <MenuItem Header="Zatvori aplikaciju">
-                </MenuItem>
-            </MenuItem>
             <MenuItem Header="Dodaj" >
                 <MenuItem x:Name="miNewPackage" Header="Novi paket" Click="miNewPackage_Click" />
                 <MenuItem x:Name="miNewCourier" Header="Novi kurir" Click="miNewCourier_Click" />
@@ -26,7 +21,7 @@
                 <MenuItem Header="O aplikaciji" />
             </MenuItem>
         </Menu>
-        <TabControl TabStripPlacement="left" Margin="4,20,0,0">
+        <TabControl SelectedIndex="1" x:Name="tcMainContent" TabStripPlacement="left" Margin="4,20,0,0" SelectionChanged="tcMainContent_SelectionChanged">
             <TabItem>
                 <TabItem.Header>
                     <Label Content="Istorija pošiljki"/>
@@ -35,7 +30,7 @@
                     <views:PackageHistory x:Name="viewPackageHistory"/>
                 </Grid>
             </TabItem>
-            <TabItem IsSelected="True">
+            <TabItem>
                 <TabItem.Header>
                     <Label Content="Pošiljke"/>
                 </TabItem.Header>

@@ -47,7 +47,7 @@ namespace Kurirska_Služba.Forms
                 SqlDataReader reader = command.ExecuteReader();
                 while (reader.Read())
                 {
-                    tbxPrice.Text = reader["Cena"].ToString();
+                    tbxPrice.Text = reader["Cena"].ToString()[0..^2];
                     tbxType.Text = reader["Opis"].ToString();
                     tbxWeight.Text = reader["Tezina"].ToString();
                 }

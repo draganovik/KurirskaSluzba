@@ -53,8 +53,8 @@ namespace Kurirska_Služba.Views
         {
             if (dgManagers.SelectedItem != null)
             {
-                DataRowView id = (DataRowView)dgManagers.SelectedItems[0];
-                DatabaseConnection.DeleteByValue(id["Korisničko Ime"].ToString()[1..], "KorisnickoIme", "tblMenadzer");
+                DataRowView item = (DataRowView)dgManagers.SelectedItems[0];
+                DatabaseConnection.DeleteByValue(item["Korisničko Ime"].ToString()[1..], "KorisnickoIme", "tblMenadzer");
                 ShowData();
             }
             else

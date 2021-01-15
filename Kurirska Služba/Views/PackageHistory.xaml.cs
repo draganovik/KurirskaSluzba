@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Kurirska_Služba.Forms;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
 using System.Linq;
 using System.Text;
@@ -26,18 +28,59 @@ namespace Kurirska_Služba.Views
             InitializeComponent();
             ShowData();
         }
+
+        #region Mouse wheel scroll in list view
+        private void svContainer_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            ScrollViewer scv = (ScrollViewer)sender;
+            scv.ScrollToVerticalOffset(scv.VerticalOffset - e.Delta);
+            e.Handled = true;
+        }
+        #endregion
         public void ShowData()
         {
-            string sqlSelect = @"select
-            tblStanjePosiljke.Vreme,
-            SVP.NazivStanja as 'Ime trenutnog procesa',
+            string sqlSelect = @"select StanjePosiljkeID as 'ID stanja', FORMAT(tblStanjePosiljke.Vreme, 'HH:mm / dd.MM.yyyy.', 'sr-Latn-RS') as 'Vreme promene', SVP.NazivStanja as 'Ime trenutnog procesa',
             '#' + CONVERT(nvarchar,posiljka.PosiljkaID) +' - '+ Posiljka.Naziv as 'Ime pošiljke',
             ISNULL(Komentar, 'Nema') as Komentar
             from tblStanjePosiljke
-                join tblPosiljka as Posiljka on tblStanjePosiljke.PosiljkaID = Posiljka.PosiljkaID
-                join tblVrstaStanjaPosiljke as SVP on tblStanjePosiljke.StanjePosiljkeID = SVP.VrstaStanjaID";
+                left join tblPosiljka as Posiljka on tblStanjePosiljke.PosiljkaID = Posiljka.PosiljkaID
+                left join tblVrstaStanjaPosiljke as SVP on tblStanjePosiljke.VrstaStanjaID = SVP.VrstaStanjaID";
             DataTable dataTable = DatabaseConnection.GetTable(sqlSelect);
             dgPackageHistory.ItemsSource = dataTable.DefaultView;
+            dgPackageHistory.Items.SortDescriptions.Add(new SortDescription("ID stanja", ListSortDirection.Descending));
+        }
+
+        private void btnShowPackage_Click(object sender, RoutedEventArgs e)
+        {
+            if (dgPackageHistory.SelectedItem != null)
+            {
+                DataRowView item = (DataRowView)dgPackageHistory.SelectedItems[0];
+                WindowManagePackage window = new WindowManagePackage(item) { Owner = Application.Current.MainWindow };
+                window.ShowDialog();
+                ShowData();
+            }
+            else
+            {
+                MessageBox.Show("Morate selektovati paket iz liste", "Paket nije izabran", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+        }
+
+        private void dgPackageHistory_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (dgPackageHistory.SelectedItem != null)
+            {
+                foreach (Button button in spControls.Children)
+                {
+                    button.IsEnabled = true;
+                }
+            }
+            else
+            {
+                foreach (Button button in spControls.Children)
+                {
+                    button.IsEnabled = true;
+                }
+            }
         }
     }
 }

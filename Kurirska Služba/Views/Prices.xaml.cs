@@ -30,7 +30,7 @@ namespace Kurirska_Služba.Views
 
         public void ShowData()
         {
-            string sqlSelect = @"select CenaID as 'Cena ID', Opis, Tezina, Cena from tblCenovnik";
+            string sqlSelect = @"select CenaID as 'Cena ID', Opis, Tezina, CAST(Cena as numeric(17,2)) from tblCenovnik";
             DataTable dataTable = DatabaseConnection.GetTable(sqlSelect);
             dgPrices.ItemsSource = dataTable.DefaultView;
         }

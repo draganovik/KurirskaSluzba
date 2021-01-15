@@ -1,0 +1,50 @@
+﻿<Window x:Class="Kurirska_Služba.Forms.WindowManagePackage"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Kurirska_Služba.Forms" xmlns:customcontrols="clr-namespace:Kurirska_Služba.CustomControls"
+        mc:Ignorable="d"
+        Title="Manage Package"  Width="460" Height="340" ResizeMode="NoResize" WindowStartupLocation="CenterOwner">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <customcontrols:CardPackage x:Name="ccManagedCardPackage" Margin="2,10,2,10" Grid.Row="0"></customcontrols:CardPackage>
+        <StackPanel Margin="20, 10, 20, 0" Grid.Row="1">
+            <Grid x:Name="grdTime" Visibility="Collapsed">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="160"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Label Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Center">Vreme promene stanja</Label>
+                <TextBox IsEnabled="False" x:Name="tbxStateDate" Grid.Column="1"></TextBox>
+            </Grid>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="160"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Label x:Name="lbState" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Center">Novo stanje</Label>
+                <ComboBox x:Name="cbxPackageState" Grid.Column="1" SelectedValuePath="VrstaStanjaID" DisplayMemberPath="NazivStanja"></ComboBox>
+            </Grid>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="160"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Label Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Center">Komentar</Label>
+                <RichTextBox x:Name="rtbComment" Grid.Column="1" Height="100" Block.LineHeight="1"></RichTextBox>
+            </Grid>
+            <Grid Margin="0,20,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="3*"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+                <Button x:Name="btnApply" Grid.Column="1" Margin="2,2,2,2" Click="btnApply_Click">Primeni novo stanje</Button>
+            </Grid>
+        </StackPanel>
+    </Grid>
+</Window>
