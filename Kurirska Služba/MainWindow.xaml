@@ -18,7 +18,7 @@
                 <MenuItem x:Name="miNewPackage" Header="Novi paket" Click="miNewPackage_Click" />
                 <MenuItem x:Name="miNewCourier" Header="Novi kurir" Click="miNewCourier_Click" />
                 <MenuItem x:Name="miNewClient" Header="Novi klijent" Click="miNewClient_Click" />
-                <MenuItem x:Name="miNewMenadžer" Header="Novi menadžer" Click="miNewMenadžer_Click" />
+                <MenuItem x:Name="miNewManager" Header="Novi menadžer" Click="miNewManager_Click" />
                 <MenuItem x:Name="miNewPrice" Header="Nova cena" Click="miNewPrice_Click" />
             </MenuItem>
             <MenuItem Header="Pomoć" >

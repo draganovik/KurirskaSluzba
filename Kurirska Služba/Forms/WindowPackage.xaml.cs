@@ -1,9 +1,8 @@
-﻿using System;
+﻿using Kurirska_Služba.Controllers;
+using System;
 using System.Data;
 using System.Data.SqlClient;
 using System.Globalization;
-using System.IO;
-using System.Text;
 using System.Threading;
 using System.Windows;
 using System.Windows.Documents;
@@ -18,12 +17,18 @@ namespace Kurirska_Služba.Forms
         SqlConnection sqlConnection = new();
         bool isEdit = false;
         int selectedID;
+        int managerID;
+
         public WindowPackage()
         {
             InitializeComponent();
             tbxName.Focus();
             EnvironmentSetup();
             setType("add");
+        }
+        public WindowPackage(string managerID) : this()
+        {
+            this.managerID = Convert.ToInt32(managerID);
         }
 
         public WindowPackage(int selectedID) : this()
@@ -116,6 +121,7 @@ namespace Kurirska_Služba.Forms
                     sqlConnection.Close();
             }
         }
+
         private void setType(String type)
         {
             switch (type)
@@ -133,37 +139,57 @@ namespace Kurirska_Služba.Forms
             }
         }
 
+        private bool hasValidValues()
+        {
+            if (tbxName.Text != "" &&
+            tbxWeight.Text != "" &&
+            cbxCourier.SelectedIndex != -1 &&
+            cbxSender.SelectedIndex != -1 &&
+            cbxReceiver.SelectedIndex != -1 &&
+            tbxPickupCity.Text != "" &&
+            tbxPickupAddress.Text != "" &&
+            tbxDropoffCity.Text != "" &&
+            tbxDropoffAddress.Text != "" &&
+            cbxPostage.SelectedIndex != -1 &&
+            dpDropoffDate.SelectedDate != null)
+            {
+                return true;
+            }
+            MessageBox.Show("Morate popuniti sve informacije osim napomene i naplate za paket.", "Operacija nije sporovedena", MessageBoxButton.OK, MessageBoxImage.Warning);
+            return false;
+        }
+
         private void btnApply_Click(object sender, RoutedEventArgs e)
         {
-            bool isValid = false;
-            try
+            if (hasValidValues())
             {
-                sqlConnection = DatabaseConnection.CreateConnection();
-                sqlConnection.Open();
-                SqlCommand command = new()
+                bool isValid = false;
+                try
                 {
-                    Connection = sqlConnection
-                };
-                command.Parameters.Add("@Naziv", System.Data.SqlDbType.NVarChar).Value = tbxName.Text;
-                command.Parameters.Add("@Tezina", System.Data.SqlDbType.Int).Value = tbxWeight.Text;
-                // TODO: Implement ManagerID
-                command.Parameters.Add("@Menadzer", System.Data.SqlDbType.Int).Value = 1;
-                command.Parameters.Add("@Kurir", System.Data.SqlDbType.Int).Value = cbxCourier.SelectedValue;
-                command.Parameters.Add("@Posiljalac", System.Data.SqlDbType.Int).Value = cbxSender.SelectedValue;
-                command.Parameters.Add("@Primalac", System.Data.SqlDbType.Int).Value = cbxReceiver.SelectedValue;
-                command.Parameters.Add("@GradPreuzimanja", System.Data.SqlDbType.NVarChar).Value = tbxPickupCity.Text;
-                command.Parameters.Add("@AdresaPreuzimanja", System.Data.SqlDbType.NVarChar).Value = tbxPickupAddress.Text;
-                command.Parameters.Add("@GradDostave", System.Data.SqlDbType.NVarChar).Value = tbxDropoffCity.Text;
-                command.Parameters.Add("@AdresaDostave", System.Data.SqlDbType.NVarChar).Value = tbxDropoffAddress.Text;
-                command.Parameters.Add("@Postarina", System.Data.SqlDbType.Int).Value = cbxPostage.SelectedValue;
-                command.Parameters.Add("@Doplata", System.Data.SqlDbType.Money).Value = Convert.ToDouble(tbxRansom.Text == "" ? 0 : tbxRansom.Text);
-                // TODO: Implement DateTime Picker
-                command.Parameters.Add("@VremeDostave", System.Data.SqlDbType.DateTime).Value = ((DateTime)dpDropoffDate.SelectedDate).ToString("yyyy-MM-dd", CultureInfo.CurrentCulture);
-                command.Parameters.Add("@Napomena", System.Data.SqlDbType.NVarChar).Value = new TextRange(rtbComment.Document.ContentStart, rtbComment.Document.ContentEnd).Text.Trim();
-                if (isEdit)
-                {
-                    command.Parameters.Add("@id", System.Data.SqlDbType.Int).Value = selectedID;
-                    command.CommandText = @"Update tblPosiljka set 
+                    sqlConnection = DatabaseConnection.CreateConnection();
+                    sqlConnection.Open();
+                    SqlCommand command = new()
+                    {
+                        Connection = sqlConnection
+                    };
+                    command.Parameters.Add("@Naziv", System.Data.SqlDbType.NVarChar).Value = tbxName.Text.Trim();
+                    command.Parameters.Add("@Tezina", System.Data.SqlDbType.Int).Value = tbxWeight.Text.Trim();
+                    command.Parameters.Add("@Menadzer", System.Data.SqlDbType.Int).Value = this.managerID;
+                    command.Parameters.Add("@Kurir", System.Data.SqlDbType.Int).Value = cbxCourier.SelectedValue;
+                    command.Parameters.Add("@Posiljalac", System.Data.SqlDbType.Int).Value = cbxSender.SelectedValue;
+                    command.Parameters.Add("@Primalac", System.Data.SqlDbType.Int).Value = cbxReceiver.SelectedValue;
+                    command.Parameters.Add("@GradPreuzimanja", System.Data.SqlDbType.NVarChar).Value = tbxPickupCity.Text.Trim();
+                    command.Parameters.Add("@AdresaPreuzimanja", System.Data.SqlDbType.NVarChar).Value = tbxPickupAddress.Text.Trim();
+                    command.Parameters.Add("@GradDostave", System.Data.SqlDbType.NVarChar).Value = tbxDropoffCity.Text.Trim();
+                    command.Parameters.Add("@AdresaDostave", System.Data.SqlDbType.NVarChar).Value = tbxDropoffAddress.Text.Trim();
+                    command.Parameters.Add("@Postarina", System.Data.SqlDbType.Int).Value = cbxPostage.SelectedValue;
+                    command.Parameters.Add("@Doplata", System.Data.SqlDbType.Money).Value = Convert.ToDouble(tbxRansom.Text.Trim() == "" ? 0 : tbxRansom.Text.Trim());
+                    command.Parameters.Add("@VremeDostave", System.Data.SqlDbType.DateTime).Value = ((DateTime)dpDropoffDate.SelectedDate).ToString("yyyy-MM-dd", CultureInfo.CurrentCulture);
+                    command.Parameters.Add("@Napomena", System.Data.SqlDbType.NVarChar).Value = new TextRange(rtbComment.Document.ContentStart, rtbComment.Document.ContentEnd).Text.Trim();
+                    if (isEdit)
+                    {
+                        command.Parameters.Add("@id", System.Data.SqlDbType.Int).Value = selectedID;
+                        command.CommandText = @"Update tblPosiljka set 
                         Naziv = @Naziv,
                         Tezina = @Tezina,
                         DodeljenMenadzerID = @Menadzer,
@@ -179,11 +205,11 @@ namespace Kurirska_Služba.Forms
                         DoplataZaPaket = @Doplata,
                         Napomena = @Napomena
                         where PosiljkaID = @id";
-                }
-                else
-                {
-                    command.CommandText =
-                        @"insert tblPosiljka (
+                    }
+                    else
+                    {
+                        command.CommandText =
+                            @"insert tblPosiljka (
                         Naziv,
                         Tezina,
                         DodeljenMenadzerID,
@@ -214,33 +240,34 @@ namespace Kurirska_Služba.Forms
                         @Doplata,
                         @Napomena
                     )";
-                }
-                command.ExecuteNonQuery();
-                command.Dispose();
-                if (!isEdit)
-                {
-                    isValid = true;
-                }
-
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Promene nisu sačuvane zbog sledećeg problema u izvršavanju operacije: \n" + ex.Message, "Operacija je neuspešna", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-            finally
-            {
-                if (sqlConnection != null)
-                {
-                    sqlConnection.Close();
-                    if (isValid)
-                    {
-                        Thread.Sleep(200);
-                        this.selectedID = getLatestPackageID();
-                        if (selectedID > -1)
-                            createInitialPackageState();
                     }
+                    command.ExecuteNonQuery();
+                    command.Dispose();
+                    if (!isEdit)
+                    {
+                        isValid = true;
+                    }
+
                 }
-                this.Close();
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Promene nisu sačuvane zbog sledećeg problema u izvršavanju operacije: \n" + ex.Message, "Operacija je neuspešna", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                finally
+                {
+                    if (sqlConnection != null)
+                    {
+                        sqlConnection.Close();
+                        if (isValid)
+                        {
+                            Thread.Sleep(200);
+                            this.selectedID = getLatestPackageID();
+                            if (selectedID > -1)
+                                createInitialPackageState();
+                        }
+                    }
+                    this.Close();
+                }
             }
         }
 
@@ -387,6 +414,16 @@ namespace Kurirska_Služba.Forms
             {
                 MessageBox.Show("Automatsko popunjavanje adrese nije uspelo", "Problem sa bazom podataka", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+        }
+
+        private void tbxWeight_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
+        {
+            e.Handled = InputValidation.IsNumeric(e.Text);
+        }
+
+        private void tbxRansom_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
+        {
+            e.Handled = InputValidation.IsNumeric(e.Text);
         }
     }
 }

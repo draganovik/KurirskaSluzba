@@ -60,7 +60,7 @@ namespace Kurirska_Služba
 
         private void miNewPackage_Click(object sender, RoutedEventArgs e)
         {
-            displayWindow(new WindowPackage() { Owner = this });
+            displayWindow(new WindowPackage(managerID) { Owner = this });
         }
 
         private void miNewClient_Click(object sender, RoutedEventArgs e)
@@ -73,7 +73,7 @@ namespace Kurirska_Služba
             displayWindow(new WindowCourier() { Owner = this });
         }
 
-        private void miNewMenadžer_Click(object sender, RoutedEventArgs e)
+        private void miNewManager_Click(object sender, RoutedEventArgs e)
         {
             displayWindow(new WindowManager() { Owner = this });
         }
@@ -92,7 +92,7 @@ namespace Kurirska_Služba
             viewPrices.ShowData();
         }
 
-        private void tcMainContent_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        private void tcMainContent_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (e.Source is TabControl)
             {
@@ -114,7 +114,7 @@ namespace Kurirska_Služba
 
         private void miAccount_Click(object sender, RoutedEventArgs e)
         {
-            WindowManager account = new WindowManager(managerID) { Owner = this };
+            WindowManager account = new WindowManager(managerID, "MenadzerID") { Owner = this };
             account.ShowDialog();
         }
 

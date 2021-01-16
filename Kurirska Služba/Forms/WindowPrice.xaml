@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Kurirska_Služba.Forms"
         mc:Ignorable="d"
-        Title="WindowPrice" Width="500" Height="260" ResizeMode="NoResize" WindowStartupLocation="CenterOwner">
+        Title="WindowPrice" Width="500" Height="220" ResizeMode="NoResize" WindowStartupLocation="CenterOwner">
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel Margin="20, 40, 20, 20">
             <Grid>
@@ -14,23 +14,15 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Label Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Center">Vrsta cene</Label>
-                <TextBox x:Name="tbxType" Grid.Column="1"></TextBox>
+                <TextBox x:Name="tbxType" Grid.Column="1" MaxLength="30"/>
             </Grid>
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="160"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <Label Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Center">Težina (g)</Label>
-                <TextBox x:Name="tbxWeight" Grid.Column="1"></TextBox>
-            </Grid>
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="160"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <Label Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Center">Cena</Label>
-                <TextBox x:Name="tbxPrice" Grid.Column="1"></TextBox>
+                <Label Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Center">Novčani iznos</Label>
+                <TextBox x:Name="tbxPrice" Grid.Column="1" PreviewTextInput="tbxPrice_PreviewTextInput" MaxLength="6"></TextBox>
             </Grid>
             <Grid Margin="0,20,0,0">
                 <Grid.ColumnDefinitions>

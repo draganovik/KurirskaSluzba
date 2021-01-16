@@ -1,18 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Kurirska_Služba.Controllers;
+using System;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace Kurirska_Služba.Forms
 {
@@ -24,12 +15,14 @@ namespace Kurirska_Služba.Forms
         SqlConnection sqlConnection = new();
         bool isEdit = false;
         int selectedID;
+
         public WindowPrice()
         {
             InitializeComponent();
             tbxType.Focus();
             setType("add");
         }
+
         public WindowPrice(int selectedID) : this()
         {
             setType("edit");
@@ -49,7 +42,6 @@ namespace Kurirska_Služba.Forms
                 {
                     tbxPrice.Text = reader["Cena"].ToString()[0..^2];
                     tbxType.Text = reader["Opis"].ToString();
-                    tbxWeight.Text = reader["Tezina"].ToString();
                 }
             }
             catch (Exception ex)
@@ -84,57 +76,72 @@ namespace Kurirska_Služba.Forms
 
         }
 
+        private bool hasValidValues()
+        {
+            if (tbxPrice.Text != "" &&
+            tbxType.Text != "")
+            {
+                return true;
+            }
+            MessageBox.Show("Morate popuniti sve informacije.", "Operacija nije sporovedena", MessageBoxButton.OK, MessageBoxImage.Warning);
+            return false;
+        }
+
         private void btnApply_Click(object sender, RoutedEventArgs e)
         {
-            try
+            if (hasValidValues())
             {
-                sqlConnection = DatabaseConnection.CreateConnection();
-                sqlConnection.Open();
-                SqlCommand command = new()
+                try
                 {
-                    Connection = sqlConnection
-                };
-                command.Parameters.Add("@Tezina", System.Data.SqlDbType.Int).Value = tbxWeight.Text;
-                command.Parameters.Add("@Cena", System.Data.SqlDbType.Money).Value = tbxPrice.Text;
-                command.Parameters.Add("@Opis", System.Data.SqlDbType.NVarChar).Value = tbxType.Text;
-                if (isEdit)
-                {
-                    command.Parameters.Add("@id", System.Data.SqlDbType.NVarChar).Value = selectedID;
-                    command.CommandText = @"Update tblCenovnik set Opis = @Opis, Cena = @Cena, Tezina = @Tezina where CenaID = @id";
-                }
-                else
-                {
-                    command.CommandText = @"Insert into tblCenovnik(Opis,Tezina,Cena) values(@Opis, @Tezina, @Cena)";
-                }
-                command.ExecuteNonQuery();
-                command.Dispose();
-                if (!isEdit)
-                {
-                    MessageBox.Show("Operacija uspešno izvršena", "Promena uspešna", MessageBoxButton.OK, MessageBoxImage.Asterisk);
-                }
-                ResetInput();
+                    sqlConnection = DatabaseConnection.CreateConnection();
+                    sqlConnection.Open();
+                    SqlCommand command = new()
+                    {
+                        Connection = sqlConnection
+                    };
+                    command.Parameters.Add("@Cena", System.Data.SqlDbType.Money).Value = tbxPrice.Text.Trim();
+                    command.Parameters.Add("@Opis", System.Data.SqlDbType.NVarChar).Value = tbxType.Text.Trim();
+                    if (isEdit)
+                    {
+                        command.Parameters.Add("@id", System.Data.SqlDbType.NVarChar).Value = selectedID;
+                        command.CommandText = @"Update tblCenovnik set Opis = @Opis, Cena = @Cena where CenaID = @id";
+                    }
+                    else
+                    {
+                        command.CommandText = @"Insert into tblCenovnik(Opis,Cena) values(@Opis, @Cena)";
+                    }
+                    command.ExecuteNonQuery();
+                    command.Dispose();
+                    if (!isEdit)
+                    {
+                        MessageBox.Show("Operacija uspešno izvršena", "Promena uspešna", MessageBoxButton.OK, MessageBoxImage.Asterisk);
+                    }
+                    ResetInput();
 
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Promene nisu sačuvane zbog sledećeg problema u izvršavanju operacije: \n" + ex.Message, "Operacija je neuspešna", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                finally
+                {
+                    if (sqlConnection != null)
+                        sqlConnection.Close();
+                    if (isEdit)
+                        this.Close();
+                }
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Promene nisu sačuvane zbog sledećeg problema u izvršavanju operacije: \n" + ex.Message, "Operacija je neuspešna", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-            finally
-            {
-                if (sqlConnection != null)
-                    sqlConnection.Close();
-                if (isEdit)
-                    this.Close();
-            }
-
-
         }
 
         private void ResetInput()
         {
-            tbxWeight.Text = "";
             tbxType.Text = "";
             tbxPrice.Text = "";
+        }
+
+        private void tbxPrice_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            e.Handled = InputValidation.IsNumeric(e.Text);
         }
     }
 }

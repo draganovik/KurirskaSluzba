@@ -16,8 +16,8 @@
             </ListView>
         </ScrollViewer>
         <StackPanel x:Name="spControls" Grid.Row="0" Orientation="Horizontal" FlowDirection="RightToLeft">
-            <Button x:Name="btnManage" IsEnabled="False" Click="btnManage_Click">Upravljaj pošiljkom</Button>
-            <Button x:Name="btnChange" IsEnabled="False" Click="btnChange_Click">Izmeni</Button>
+            <Button x:Name="btnManage" IsEnabled="False" Click="btnManage_Click">Promeni stanje</Button>
+            <Button x:Name="btnChange" IsEnabled="False" Click="btnChange_Click">Podaci pošiljke</Button>
             <Button x:Name="btnDelete" IsEnabled="False" Click="btnDelete_Click">Obriši</Button>
         </StackPanel>
     </Grid>

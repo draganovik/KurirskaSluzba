@@ -35,7 +35,7 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Label Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Center">Komentar</Label>
-                <RichTextBox x:Name="rtbComment" Grid.Column="1" Height="100" Block.LineHeight="1"></RichTextBox>
+                <RichTextBox x:Name="rtbComment" Grid.Column="1" Height="100" Block.LineHeight="1"/>
             </Grid>
             <Grid Margin="0,20,0,0">
                 <Grid.ColumnDefinitions>

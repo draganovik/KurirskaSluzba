@@ -14,7 +14,7 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Label Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Center">Ime</Label>
-                <TextBox x:Name="tbxName" Grid.Column="1"></TextBox>
+                <TextBox x:Name="tbxName" Grid.Column="1" MaxLength="16"/>
             </Grid>
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -22,7 +22,7 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Label Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Center">Prezime</Label>
-                <TextBox x:Name="tbxSurname" Grid.Column="1"></TextBox>
+                <TextBox x:Name="tbxSurname" Grid.Column="1" MaxLength="16"/>
             </Grid>
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -30,7 +30,7 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Label Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Center">Telefonski broj</Label>
-                <TextBox x:Name="tbxPhoneNumber" Grid.Column="1"></TextBox>
+                <TextBox x:Name="tbxPhoneNumber" Grid.Column="1" PreviewTextInput="tbxPhoneNumber_PreviewTextInput" MaxLength="16"/>
             </Grid>
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -38,7 +38,7 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Label Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Center">Grad</Label>
-                <TextBox x:Name="tbxCity" Grid.Column="1"></TextBox>
+                <TextBox x:Name="tbxCity" Grid.Column="1" MaxLength="20"/>
             </Grid>
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -46,7 +46,7 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Label Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Center">Adresa</Label>
-                <TextBox x:Name="tbxAddress" Grid.Column="1"></TextBox>
+                <TextBox x:Name="tbxAddress" Grid.Column="1" MaxLength="50"/>
             </Grid>
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -54,7 +54,7 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Label Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Center">Korisničko ime</Label>
-                <TextBox x:Name="tbxUsername" Grid.Column="1"></TextBox>
+                <TextBox x:Name="tbxUsername" Grid.Column="1" PreviewTextInput="tbxUsername_PreviewTextInput" MaxLength="16"/>
             </Grid>
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -62,7 +62,7 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Label Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Center">Jednokratna lozinka</Label>
-                <PasswordBox x:Name="tbxPassword" Grid.Column="1"></PasswordBox>
+                <PasswordBox x:Name="tbxPassword" Grid.Column="1" MaxLength="50"/>
             </Grid>
             <Grid Margin="0,20,0,0">
                 <Grid.ColumnDefinitions>

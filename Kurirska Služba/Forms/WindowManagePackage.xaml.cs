@@ -1,19 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Kurirska_Služba.Controllers;
+using System;
 using System.Data;
 using System.Data.SqlClient;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace Kurirska_Služba.Forms
 {
@@ -52,7 +43,7 @@ namespace Kurirska_Služba.Forms
             grdTime.Visibility = Visibility.Visible;
             btnApply.Visibility = Visibility.Collapsed;
             lbState.Content = "Stanje pošiljke";
-            
+
             rtbComment.SelectAll();
             rtbComment.Selection.Text = item["Komentar"].ToString();
             rtbComment.IsEnabled = false;

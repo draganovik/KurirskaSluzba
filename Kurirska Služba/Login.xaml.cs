@@ -1,18 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Kurirska_Služba.Controllers;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace Kurirska_Služba
 {
@@ -28,7 +18,7 @@ namespace Kurirska_Služba
 
         private void btnLogin_Click(object sender, RoutedEventArgs e)
         {
-            var adminID = ValidateLoginGetID();
+            var adminID = ValidateLoginGetUserID();
             if (adminID != "")
             {
                 MainWindow main = new MainWindow(adminID);
@@ -37,12 +27,12 @@ namespace Kurirska_Služba
             }
             else
             {
-                MessageBox.Show("Podaci nisu validni", "Prijava nije moguća",MessageBoxButton.OK,MessageBoxImage.Exclamation);
+                MessageBox.Show("Podaci nisu validni", "Prijava nije moguća", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
-            
+
         }
 
-        private string ValidateLoginGetID()
+        private string ValidateLoginGetUserID()
         {
             SqlConnection sqlConnection = new();
             string id = "";
@@ -63,7 +53,7 @@ namespace Kurirska_Služba
                 {
                     if (reader.HasRows)
                     {
-                        id = reader["KorisnickoIme"].ToString();
+                        id = reader["MenadzerID"].ToString();
                     }
                 }
             }
@@ -76,6 +66,11 @@ namespace Kurirska_Služba
                 }
             }
             return id;
+        }
+
+        private void tbxUsername_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            e.Handled = InputValidation.IsTextASCII(e.Text);
         }
     }
 }

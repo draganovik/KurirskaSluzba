@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 
-namespace Kurirska_Služba
+namespace Kurirska_Služba.Controllers
 {
     class DatabaseConnection
     {
@@ -121,6 +117,39 @@ namespace Kurirska_Služba
                     connection.Close();
                 }
             }
+        }
+        public static bool IsUniqueValue(string id, string idName, string tableName)
+        {
+            bool isUnique = false;
+            SqlConnection sqlConnection = new();
+            try
+            {
+                sqlConnection = CreateConnection();
+                sqlConnection.Open();
+                SqlCommand command = new SqlCommand
+                {
+                    Connection = sqlConnection
+                };
+                command.CommandText = @"select * from " + tableName + " where " + idName + " = '" + id + "'";
+                SqlDataReader reader = command.ExecuteReader();
+                if(!reader.HasRows)
+                {
+                    isUnique = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Nije moguće uporediti vrednosti sa bazom podataka " + ex.Message, "Problem u konekciji!", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                sqlConnection.Dispose();
+                if (sqlConnection != null)
+                {
+                    sqlConnection.Close();
+                }
+            }
+            return isUnique;
         }
     }
 }

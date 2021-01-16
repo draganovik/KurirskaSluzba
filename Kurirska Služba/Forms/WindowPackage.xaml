@@ -14,7 +14,7 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Label Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Center">Ime pošiljke</Label>
-                <TextBox x:Name="tbxName" Grid.Column="1"></TextBox>
+                <TextBox x:Name="tbxName" Grid.Column="1" MaxLength="30" />
             </Grid>
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -22,7 +22,7 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Label Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Center">Tezina (g)</Label>
-                <TextBox x:Name="tbxWeight" Grid.Column="1"></TextBox>
+                <TextBox x:Name="tbxWeight" Grid.Column="1" PreviewTextInput="tbxWeight_PreviewTextInput" MaxLength="6" />
             </Grid>
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -46,7 +46,7 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Label Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Center">Grad preuzimanja</Label>
-                <TextBox x:Name="tbxPickupCity" Grid.Column="1"></TextBox>
+                <TextBox x:Name="tbxPickupCity" Grid.Column="1" MaxLength="20" />
             </Grid>
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -54,7 +54,7 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Label Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Center">Adresa preuzimanja</Label>
-                <TextBox x:Name="tbxPickupAddress" Grid.Column="1"></TextBox>
+                <TextBox x:Name="tbxPickupAddress" Grid.Column="1" MaxLength="50" />
             </Grid>
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -62,7 +62,7 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Label Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Center">Grad dostave</Label>
-                <TextBox x:Name="tbxDropoffCity" Grid.Column="1"></TextBox>
+                <TextBox x:Name="tbxDropoffCity" Grid.Column="1" MaxLength="20"/>
             </Grid>
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -70,7 +70,7 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Label Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Center">Adresa dostave</Label>
-                <TextBox x:Name="tbxDropoffAddress" Grid.Column="1"></TextBox>
+                <TextBox x:Name="tbxDropoffAddress" Grid.Column="1" MaxLength="50"/>
             </Grid>
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -94,7 +94,7 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Label Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Center">Naplata za paket</Label>
-                <TextBox x:Name="tbxRansom" Grid.Column="1"></TextBox>
+                <TextBox x:Name="tbxRansom" Grid.Column="1" PreviewTextInput="tbxRansom_PreviewTextInput" MaxLength="10"></TextBox>
             </Grid>
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -110,7 +110,7 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Label Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Center">Napomena</Label>
-                <RichTextBox x:Name="rtbComment" Grid.Column="1" Height="100" Block.LineHeight="1"></RichTextBox>
+                <RichTextBox x:Name="rtbComment" Grid.Column="1" Height="100" Block.LineHeight="1"/>
             </Grid>
             <Grid Margin="0,20,0,0">
                 <Grid.ColumnDefinitions>
