@@ -159,7 +159,7 @@ namespace Kurirska_Služba.Forms
                 command.Parameters.Add("@Doplata", System.Data.SqlDbType.Money).Value = Convert.ToDouble(tbxRansom.Text == "" ? 0 : tbxRansom.Text);
                 // TODO: Implement DateTime Picker
                 command.Parameters.Add("@VremeDostave", System.Data.SqlDbType.DateTime).Value = ((DateTime)dpDropoffDate.SelectedDate).ToString("yyyy-MM-dd", CultureInfo.CurrentCulture);
-                command.Parameters.Add("@Napomena", System.Data.SqlDbType.NVarChar).Value = new TextRange(rtbComment.Document.ContentStart, rtbComment.Document.ContentEnd).Text;
+                command.Parameters.Add("@Napomena", System.Data.SqlDbType.NVarChar).Value = new TextRange(rtbComment.Document.ContentStart, rtbComment.Document.ContentEnd).Text.Trim();
                 if (isEdit)
                 {
                     command.Parameters.Add("@id", System.Data.SqlDbType.Int).Value = selectedID;
@@ -219,10 +219,8 @@ namespace Kurirska_Služba.Forms
                 command.Dispose();
                 if (!isEdit)
                 {
-                    MessageBox.Show("Operacija uspešno izvršena", "Promena uspešna", MessageBoxButton.OK, MessageBoxImage.Asterisk);
                     isValid = true;
                 }
-                ResetInput();
 
             }
             catch (Exception ex)
@@ -242,8 +240,7 @@ namespace Kurirska_Služba.Forms
                             createInitialPackageState();
                     }
                 }
-                if (isEdit)
-                    this.Close();
+                this.Close();
             }
         }
 
@@ -336,6 +333,60 @@ namespace Kurirska_Služba.Forms
             tbxRansom.Text = "";
             dpDropoffDate.SelectedDate = null;
             rtbComment.Document = new();
+        }
+
+        private void cbxSender_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            try
+            {
+                sqlConnection = DatabaseConnection.CreateConnection();
+                sqlConnection.Open();
+                SqlCommand command = new SqlCommand
+                {
+                    Connection = sqlConnection
+                };
+                sqlConnection = DatabaseConnection.CreateConnection();
+                sqlConnection.Open();
+                command.CommandText = @"SELECT Grad, Adresa FROM tblKlijent where KlijentID =" + cbxSender.SelectedValue;
+                SqlDataReader reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    tbxPickupCity.Text = reader["Grad"].ToString();
+                    tbxPickupAddress.Text = reader["Adresa"].ToString();
+
+                }
+            }
+            catch
+            {
+                MessageBox.Show("Automatsko popunjavanje adrese nije uspelo", "Problem sa bazom podataka", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void cbxReceiver_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            try
+            {
+                sqlConnection = DatabaseConnection.CreateConnection();
+                sqlConnection.Open();
+                SqlCommand command = new SqlCommand
+                {
+                    Connection = sqlConnection
+                };
+                sqlConnection = DatabaseConnection.CreateConnection();
+                sqlConnection.Open();
+                command.CommandText = @"SELECT Grad, Adresa FROM tblKlijent where KlijentID =" + cbxReceiver.SelectedValue;
+                SqlDataReader reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    tbxDropoffCity.Text = reader["Grad"].ToString();
+                    tbxDropoffAddress.Text = reader["Adresa"].ToString();
+
+                }
+            }
+            catch
+            {
+                MessageBox.Show("Automatsko popunjavanje adrese nije uspelo", "Problem sa bazom podataka", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
     }
 }

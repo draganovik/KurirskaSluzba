@@ -14,6 +14,7 @@
     <None Remove="Assets\box_small.png" />
     <None Remove="Assets\letter_large.png" />
     <None Remove="Assets\letter_small.png" />
+    <None Remove="Assets\logo.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -21,6 +22,7 @@
     <Resource Include="Assets\letter_large.png" />
     <Resource Include="Assets\box_small.png" />
     <Resource Include="Assets\box_large.png" />
+    <Resource Include="Assets\logo.png" />
   </ItemGroup>
 
   <ItemGroup>

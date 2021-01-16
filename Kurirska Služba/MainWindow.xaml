@@ -7,6 +7,13 @@
         Title=" Kurirska Služba" MinHeight="520" MinWidth="860" Height="520" Width="860" WindowStartupLocation="CenterScreen">
     <DockPanel>
         <Menu DockPanel.Dock="Top" IsMainMenu="True" FlowDirection="LeftToRight">
+            <MenuItem Header="Opcije">
+                <MenuItem x:Name="miAccount" Header="O vašem nalogu" Click="miAccount_Click"/>
+                <MenuItem x:Name="miSignOut" Header="Odjava" Click="miSignOut_Click"/>
+                <Separator/>
+                <MenuItem x:Name="miExitProgram" Header="Zatvori aplikaciju" Click="miExitProgram_Click">
+                </MenuItem>
+            </MenuItem>
             <MenuItem Header="Dodaj" >
                 <MenuItem x:Name="miNewPackage" Header="Novi paket" Click="miNewPackage_Click" />
                 <MenuItem x:Name="miNewCourier" Header="Novi kurir" Click="miNewCourier_Click" />
@@ -15,8 +22,8 @@
                 <MenuItem x:Name="miNewPrice" Header="Nova cena" Click="miNewPrice_Click" />
             </MenuItem>
             <MenuItem Header="Pomoć" >
-                <MenuItem Header="Nabavite novu verziju" />
-                <MenuItem Header="Podrška" />
+                <MenuItem x:Name="miNewVersion" Header="Nabavite novu verziju" Click="miNewVersion_Click" />
+                <MenuItem x:Name="miSupport" Header="Podrška" Click="miSupport_Click" />
                 <Separator/>
                 <MenuItem Header="O aplikaciji" />
             </MenuItem>

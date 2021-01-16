@@ -14,9 +14,7 @@
         <StackPanel x:Name="spControls" Grid.Row="0" Orientation="Horizontal" FlowDirection="RightToLeft">
             <Button x:Name="btnShowPackage" Click="btnShowPackage_Click" IsEnabled="False">Prikaži paket</Button>
         </StackPanel>
-        <ScrollViewer x:Name="svContainer" Grid.Row="1" HorizontalScrollBarVisibility="Disabled" CanContentScroll="False" PreviewMouseWheel="svContainer_PreviewMouseWheel">
-            <DataGrid ColumnWidth="*" x:Name="dgPackageHistory" SelectionMode="Single" SelectionUnit="FullRow" IsReadOnly="True" AlternationCount="2" CanUserAddRows="False" SelectionChanged="dgPackageHistory_SelectionChanged" >
-            </DataGrid>
-        </ScrollViewer>
+        <DataGrid ColumnWidth="*"  Grid.Row="1" x:Name="dgPackageHistory" SelectionMode="Single" SelectionUnit="FullRow" IsReadOnly="True" AlternationCount="2" CanUserAddRows="False" SelectionChanged="dgPackageHistory_SelectionChanged">
+        </DataGrid>
     </Grid>
 </UserControl>

@@ -1,6 +1,7 @@
 ﻿using Kurirska_Služba.Forms;
 using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
@@ -12,6 +13,7 @@ namespace Kurirska_Služba
     /// </summary>
     public partial class MainWindow : Window
     {
+        string managerID = "";
         static MainWindow()
         {
             _menuDropAlignmentField = typeof(SystemParameters).GetField("_menuDropAlignment", BindingFlags.NonPublic | BindingFlags.Static);
@@ -19,6 +21,11 @@ namespace Kurirska_Služba
 
             EnsureStandardPopupAlignment();
             SystemParameters.StaticPropertyChanged += SystemParameters_StaticPropertyChanged;
+        }
+        public MainWindow(string managerID) : base()
+        {
+            InitializeComponent();
+            this.managerID = managerID;
         }
 
         #region Menubar fix
@@ -91,6 +98,44 @@ namespace Kurirska_Služba
             {
                 updateViews();
             }
+        }
+
+        private void miSignOut_Click(object sender, RoutedEventArgs e)
+        {
+            Login login = new Login();
+            login.Show();
+            this.Close();
+        }
+
+        private void miExitProgram_Click(object sender, RoutedEventArgs e)
+        {
+            Application.Current.Shutdown();
+        }
+
+        private void miAccount_Click(object sender, RoutedEventArgs e)
+        {
+            WindowManager account = new WindowManager(managerID) { Owner = this };
+            account.ShowDialog();
+        }
+
+        private void miNewVersion_Click(object sender, RoutedEventArgs e)
+        {
+            var psi = new ProcessStartInfo
+            {
+                FileName = "https://github.com/draganovik/KurirskaSluzba",
+                UseShellExecute = true
+            };
+            Process.Start(psi);
+        }
+
+        private void miSupport_Click(object sender, RoutedEventArgs e)
+        {
+            var psi = new ProcessStartInfo
+            {
+                FileName = "https://draganovik.com/kontakt",
+                UseShellExecute = true
+            };
+            Process.Start(psi);
         }
     }
 }

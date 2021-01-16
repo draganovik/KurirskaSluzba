@@ -96,7 +96,7 @@ namespace Kurirska_Služba.Forms
                 };
                 command.Parameters.Add("@id", SqlDbType.Int).Value = selectedID;
                 this.selectedID = selectedID;
-                command.CommandText = @"select * from tblStanjePosiljke where PosiljkaID = " + selectedID.ToString();
+                command.CommandText = @"select * from tblStanjePosiljke where PosiljkaID = @id";
                 SqlDataReader reader = command.ExecuteReader();
                 while (reader.Read())
                 {
@@ -175,7 +175,7 @@ namespace Kurirska_Služba.Forms
                 command.Parameters.Add("@Posiljka", System.Data.SqlDbType.Int).Value = selectedID;
                 command.Parameters.Add("@Vreme", System.Data.SqlDbType.DateTime).Value = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.CurrentCulture);
                 command.Parameters.Add("@Stanje", System.Data.SqlDbType.Int).Value = cbxPackageState.SelectedValue;
-                command.Parameters.Add("@Komentar", System.Data.SqlDbType.NVarChar).Value = new TextRange(rtbComment.Document.ContentStart, rtbComment.Document.ContentEnd).Text;
+                command.Parameters.Add("@Komentar", System.Data.SqlDbType.NVarChar).Value = new TextRange(rtbComment.Document.ContentStart, rtbComment.Document.ContentEnd).Text.Trim();
                 command.CommandText =
                         @"insert tblStanjePosiljke (
                         PosiljkaID,

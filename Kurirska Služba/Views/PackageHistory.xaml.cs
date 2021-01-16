@@ -29,14 +29,6 @@ namespace Kurirska_Služba.Views
             ShowData();
         }
 
-        #region Mouse wheel scroll in list view
-        private void svContainer_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
-        {
-            ScrollViewer scv = (ScrollViewer)sender;
-            scv.ScrollToVerticalOffset(scv.VerticalOffset - e.Delta);
-            e.Handled = true;
-        }
-        #endregion
         public void ShowData()
         {
             string sqlSelect = @"select StanjePosiljkeID as 'ID stanja', FORMAT(tblStanjePosiljke.Vreme, 'HH:mm / dd.MM.yyyy.', 'sr-Latn-RS') as 'Vreme promene', SVP.NazivStanja as 'Ime trenutnog procesa',

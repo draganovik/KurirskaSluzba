@@ -29,16 +29,8 @@
                     <ColumnDefinition Width="160"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <Label Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Center">Dodeljen kurir</Label>
-                <ComboBox x:Name="cbxCourier" Grid.Column="1" DisplayMemberPath="Kurir" SelectedValuePath="KurirID"></ComboBox>
-            </Grid>
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="160"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
                 <Label Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Center">Pošiljalac</Label>
-                <ComboBox x:Name="cbxSender" Grid.Column="1" DisplayMemberPath="Klijent" SelectedValuePath="KlijentID"></ComboBox>
+                <ComboBox x:Name="cbxSender" Grid.Column="1" DisplayMemberPath="Klijent" SelectedValuePath="KlijentID" SelectionChanged="cbxSender_SelectionChanged"></ComboBox>
             </Grid>
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -46,7 +38,7 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Label Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Center">Primalac</Label>
-                <ComboBox x:Name="cbxReceiver" Grid.Column="1" DisplayMemberPath="Klijent" SelectedValuePath="KlijentID"></ComboBox>
+                <ComboBox x:Name="cbxReceiver" Grid.Column="1" DisplayMemberPath="Klijent" SelectedValuePath="KlijentID" SelectionChanged="cbxReceiver_SelectionChanged"></ComboBox>
             </Grid>
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -79,6 +71,14 @@
                 </Grid.ColumnDefinitions>
                 <Label Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Center">Adresa dostave</Label>
                 <TextBox x:Name="tbxDropoffAddress" Grid.Column="1"></TextBox>
+            </Grid>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="160"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Label Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Center">Dodeljen kurir</Label>
+                <ComboBox x:Name="cbxCourier" Grid.Column="1" DisplayMemberPath="Kurir" SelectedValuePath="KurirID"></ComboBox>
             </Grid>
             <Grid>
                 <Grid.ColumnDefinitions>

@@ -37,8 +37,40 @@ namespace Kurirska_Služba.Views
             lvPackages.Items.Clear();
             foreach (DataRow row in dtCouriers.Rows)
             {
-                lvPackages.Items.Insert(0, new CardPackage(Convert.ToInt32(row["PosiljkaID"].ToString()), row["Ime"].ToString(), Convert.ToInt32(row["Tezina"].ToString()), row["Preuzimanje"].ToString(), row["Dostava"].ToString(), "TODO"));
+                lvPackages.Items.Insert(0, new CardPackage(Convert.ToInt32(row["PosiljkaID"].ToString()), row["Ime"].ToString(), Convert.ToInt32(row["Tezina"].ToString()), row["Preuzimanje"].ToString(), row["Dostava"].ToString(), getPackageState(Convert.ToInt32(row["PosiljkaID"]))));
             }
+        }
+        private string getPackageState(int id)
+        {
+            SqlConnection sqlConnection = new();
+            string historyValue = "NULL";
+            try
+            {
+                sqlConnection = DatabaseConnection.CreateConnection();
+                sqlConnection.Open();
+                SqlCommand command = new SqlCommand
+                {
+                    Connection = sqlConnection
+                };
+                command.Parameters.Add("@id", SqlDbType.Int).Value = id;
+                command.CommandText = @"select tblVrstaStanjaPosiljke.NazivStanja from tblStanjePosiljke
+                                        join tblVrstaStanjaPosiljke on tblStanjePosiljke.VrstaStanjaID = tblVrstaStanjaPosiljke.VrstaStanjaID
+                                        where PosiljkaID = @id";
+                SqlDataReader reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    historyValue = reader["NazivStanja"].ToString();
+                }
+            }
+            finally
+            {
+                sqlConnection.Dispose();
+                if (sqlConnection != null)
+                {
+                    sqlConnection.Close();
+                }
+            }
+            return historyValue;
         }
 
         private void eraceStateHistory(int packageID)
