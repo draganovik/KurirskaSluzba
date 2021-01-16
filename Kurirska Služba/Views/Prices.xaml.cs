@@ -21,7 +21,7 @@ namespace KurirskaSluzba.Views
 
         public void ShowData()
         {
-            string sqlSelect = @"select CenaID as 'Cena ID', Opis, CAST(Cena as numeric(17,2)) from tblCenovnik";
+            string sqlSelect = @"select CenaID as 'Cena ID', Opis, CAST(Cena as numeric(17,2)) as Iznos from tblCenovnik";
             DataTable dataTable = DatabaseConnection.GetTable(sqlSelect);
             dgPrices.ItemsSource = dataTable.DefaultView;
             dataTable.Dispose();

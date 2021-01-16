@@ -3,12 +3,12 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             mc:Ignorable="d" Margin="2,10">
+             mc:Ignorable="d" Margin="10">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="80"/>
             <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="100"/>
+            <ColumnDefinition Width="120"/>
         </Grid.ColumnDefinitions>
         <Border x:Name="brdImage" CornerRadius="2" Grid.Column="0" RenderOptions.BitmapScalingMode="HighQuality" Width="60" Height="60"  VerticalAlignment="Center" HorizontalAlignment="Center">
             <Border.Background>

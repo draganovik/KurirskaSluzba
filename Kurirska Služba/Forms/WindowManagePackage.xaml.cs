@@ -177,7 +177,9 @@ namespace KurirskaSluzba.Forms
                 command.Parameters.Add("@Posiljka", SqlDbType.Int).Value = selectedID;
                 command.Parameters.Add("@Vreme", SqlDbType.DateTime).Value = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.CurrentCulture);
                 command.Parameters.Add("@Stanje", SqlDbType.Int).Value = cbxPackageState.SelectedValue;
-                command.Parameters.Add("@Komentar", SqlDbType.NVarChar).Value = new TextRange(rtbComment.Document.ContentStart, rtbComment.Document.ContentEnd).Text.Trim();
+                string comment = new TextRange(rtbComment.Document.ContentStart,
+                                               rtbComment.Document.ContentEnd).Text.Trim();
+                command.Parameters.Add("@Komentar", SqlDbType.NVarChar).Value = string.IsNullOrEmpty(comment) ? "Nema komentara" : comment;
                 command.CommandText =
                         @"insert tblStanjePosiljke (
                         PosiljkaID,
