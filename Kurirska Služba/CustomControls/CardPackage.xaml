@@ -1,9 +1,8 @@
-﻿<UserControl x:Name="cardPackage" x:Class="Kurirska_Služba.CustomControls.CardPackage"
+﻿<UserControl x:Name="cardPackage" x:Class="KurirskaSluzba.CustomControls.CardPackage"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:Kurirska_Služba.CustomControls"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              mc:Ignorable="d" Margin="2,10">
     <Grid>
         <Grid.ColumnDefinitions>
@@ -11,7 +10,11 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="100"/>
         </Grid.ColumnDefinitions>
-        <Border x:Name="brdImage" CornerRadius="2" Grid.Column="0" RenderOptions.BitmapScalingMode="HighQuality" Width="60" Height="60"  VerticalAlignment="Center" HorizontalAlignment="Center" Background="#FF99B4D1"/>
+        <Border x:Name="brdImage" CornerRadius="2" Grid.Column="0" RenderOptions.BitmapScalingMode="HighQuality" Width="60" Height="60"  VerticalAlignment="Center" HorizontalAlignment="Center">
+            <Border.Background>
+                <ImageBrush ImageSource="pack://application:,,,/Assets/logo.png"/>
+            </Border.Background>
+        </Border>
         <StackPanel Grid.Column="1" VerticalAlignment="Center">
             <Label x:Name="lbName" FontSize="16" FontWeight="Bold" Padding="2,0,0,2">iPhone 12 Pro Max</Label>
             <StackPanel Orientation="Horizontal">

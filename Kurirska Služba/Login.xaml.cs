@@ -1,10 +1,10 @@
-﻿using Kurirska_Služba.Controllers;
+﻿using KurirskaSluzba.Controllers;
 using System.Data;
 using System.Data.SqlClient;
 using System.Windows;
 using System.Windows.Input;
 
-namespace Kurirska_Služba
+namespace KurirskaSluzba
 {
     /// <summary>
     /// Interaction logic for Login.xaml
@@ -16,25 +16,9 @@ namespace Kurirska_Služba
             InitializeComponent();
         }
 
-        private void btnLogin_Click(object sender, RoutedEventArgs e)
-        {
-            var adminID = ValidateLoginGetUserID();
-            if (adminID != "")
-            {
-                MainWindow main = new MainWindow(adminID);
-                main.Show();
-                this.Close();
-            }
-            else
-            {
-                MessageBox.Show("Podaci nisu validni", "Prijava nije moguća", MessageBoxButton.OK, MessageBoxImage.Warning);
-            }
-
-        }
-
         private string ValidateLoginGetUserID()
         {
-            SqlConnection sqlConnection = new();
+            SqlConnection sqlConnection = null;
             string id = "";
             try
             {
@@ -56,6 +40,7 @@ namespace Kurirska_Služba
                         id = reader["MenadzerID"].ToString();
                     }
                 }
+                command.Dispose();
             }
             finally
             {
@@ -66,6 +51,22 @@ namespace Kurirska_Služba
                 }
             }
             return id;
+        }
+
+        private void btnLogin_Click(object sender, RoutedEventArgs e)
+        {
+            string adminID = ValidateLoginGetUserID();
+            if (!string.IsNullOrEmpty(adminID))
+            {
+                MainWindow main = new MainWindow(adminID);
+                main.Show();
+                Close();
+            }
+            else
+            {
+                MessageBox.Show("Podaci nisu validni", "Prijava nije moguća", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+
         }
 
         private void tbxUsername_PreviewTextInput(object sender, TextCompositionEventArgs e)

@@ -1,10 +1,10 @@
-﻿using Kurirska_Služba.Controllers;
-using Kurirska_Služba.Forms;
+﻿using KurirskaSluzba.Controllers;
+using KurirskaSluzba.Forms;
 using System.Data;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace Kurirska_Služba.Views
+namespace KurirskaSluzba.Views
 {
     /// <summary>
     /// Interaction logic for Couriers.xaml
@@ -16,11 +16,13 @@ namespace Kurirska_Služba.Views
             InitializeComponent();
             ShowData();
         }
+
         public void ShowData()
         {
             string sqlSelect = @"select '@' + KorisnickoIme as 'Korisničko ime', Ime + ' ' + Prezime as Ime, Lokacija, TelefonskiBroj as 'Broj telefona' from tblKurir";
             DataTable dataTable = DatabaseConnection.GetTable(sqlSelect);
             dgCouriers.ItemsSource = dataTable.DefaultView;
+            dataTable.Dispose();
         }
 
         private void btnChange_Click(object sender, RoutedEventArgs e)
@@ -42,8 +44,8 @@ namespace Kurirska_Služba.Views
         {
             if (dgCouriers.SelectedItem != null)
             {
-                DataRowView id = (DataRowView)dgCouriers.SelectedItems[0];
-                DatabaseConnection.DeleteByValue(id["Korisničko ime"].ToString()[1..], "KorisnickoIme", "tblKurir");
+                DataRowView selectedRow = (DataRowView)dgCouriers.SelectedItems[0];
+                DatabaseConnection.DeleteByValue(selectedRow["Korisničko ime"].ToString()[1..], "KorisnickoIme", "tblKurir");
                 ShowData();
             }
             else

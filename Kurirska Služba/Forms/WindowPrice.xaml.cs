@@ -1,20 +1,20 @@
-﻿using Kurirska_Služba.Controllers;
+﻿using KurirskaSluzba.Controllers;
 using System;
 using System.Data;
 using System.Data.SqlClient;
 using System.Windows;
 using System.Windows.Input;
 
-namespace Kurirska_Služba.Forms
+namespace KurirskaSluzba.Forms
 {
     /// <summary>
     /// Interaction logic for WindowPrice.xaml
     /// </summary>
     public partial class WindowPrice : Window
     {
-        SqlConnection sqlConnection = new();
-        bool isEdit = false;
-        int selectedID;
+        private SqlConnection sqlConnection = new();
+        private bool isEdit;
+        private readonly int selectedID;
 
         public WindowPrice()
         {
@@ -43,11 +43,12 @@ namespace Kurirska_Služba.Forms
                     tbxPrice.Text = reader["Cena"].ToString()[0..^2];
                     tbxType.Text = reader["Opis"].ToString();
                 }
+                command.Dispose();
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Nije moguće očitati vrednosti elementa " + ex.Message, "Izmena nije moguća", MessageBoxButton.OK, MessageBoxImage.Error);
-                this.Close();
+                Close();
             }
             finally
             {
@@ -58,17 +59,18 @@ namespace Kurirska_Služba.Forms
             }
         }
 
-        private void setType(String type)
+        private void setType(string type)
         {
             switch (type)
             {
                 case "edit":
-                    this.Title = "Izmena cene";
+                    Title = "Izmena cene";
                     btnApply.Content = "Sačuvaj";
                     isEdit = true;
                     break;
                 case "add":
-                    this.Title = "Dodavanje nove cene";
+                default:
+                    Title = "Dodavanje nove cene";
                     btnApply.Content = "Dodaj cenu";
                     isEdit = false;
                     break;
@@ -78,8 +80,8 @@ namespace Kurirska_Služba.Forms
 
         private bool hasValidValues()
         {
-            if (tbxPrice.Text != "" &&
-            tbxType.Text != "")
+            if (!string.IsNullOrEmpty(tbxPrice.Text) &&
+            !string.IsNullOrEmpty(tbxType.Text))
             {
                 return true;
             }
@@ -99,11 +101,11 @@ namespace Kurirska_Služba.Forms
                     {
                         Connection = sqlConnection
                     };
-                    command.Parameters.Add("@Cena", System.Data.SqlDbType.Money).Value = tbxPrice.Text.Trim();
-                    command.Parameters.Add("@Opis", System.Data.SqlDbType.NVarChar).Value = tbxType.Text.Trim();
+                    command.Parameters.Add("@Cena", SqlDbType.Money).Value = tbxPrice.Text.Trim();
+                    command.Parameters.Add("@Opis", SqlDbType.NVarChar).Value = tbxType.Text.Trim();
                     if (isEdit)
                     {
-                        command.Parameters.Add("@id", System.Data.SqlDbType.NVarChar).Value = selectedID;
+                        command.Parameters.Add("@id", SqlDbType.NVarChar).Value = selectedID;
                         command.CommandText = @"Update tblCenovnik set Opis = @Opis, Cena = @Cena where CenaID = @id";
                     }
                     else
@@ -112,11 +114,6 @@ namespace Kurirska_Služba.Forms
                     }
                     command.ExecuteNonQuery();
                     command.Dispose();
-                    if (!isEdit)
-                    {
-                        MessageBox.Show("Operacija uspešno izvršena", "Promena uspešna", MessageBoxButton.OK, MessageBoxImage.Asterisk);
-                    }
-                    ResetInput();
 
                 }
                 catch (Exception ex)
@@ -125,18 +122,14 @@ namespace Kurirska_Služba.Forms
                 }
                 finally
                 {
+                    sqlConnection.Dispose();
                     if (sqlConnection != null)
+                    {
                         sqlConnection.Close();
-                    if (isEdit)
-                        this.Close();
+                        Close();
+                    }
                 }
             }
-        }
-
-        private void ResetInput()
-        {
-            tbxType.Text = "";
-            tbxPrice.Text = "";
         }
 
         private void tbxPrice_PreviewTextInput(object sender, TextCompositionEventArgs e)

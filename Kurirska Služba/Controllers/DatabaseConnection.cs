@@ -3,9 +3,9 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Windows;
 
-namespace Kurirska_Služba.Controllers
+namespace KurirskaSluzba.Controllers
 {
-    class DatabaseConnection
+    internal class DatabaseConnection
     {
         public static SqlConnection CreateConnection()
         {
@@ -20,13 +20,25 @@ namespace Kurirska_Služba.Controllers
         }
         public static DataTable GetTable(string selectCommandText)
         {
-            SqlConnection sqlConnection = CreateConnection();
-            sqlConnection.Open();
-            SqlDataAdapter sdaCouriers = new(selectCommandText, sqlConnection);
-            DataTable dataTable = new();
-            sdaCouriers.Fill(dataTable);
-            sqlConnection.Dispose();
-            sqlConnection.Close();
+            DataTable dataTable = null;
+            SqlConnection sqlConnection = null;
+            try
+            {
+                sqlConnection = CreateConnection();
+                sqlConnection.Open();
+                SqlDataAdapter sqlDataAdapter = new(selectCommandText, sqlConnection);
+                dataTable = new();
+                sqlDataAdapter.Fill(dataTable);
+                sqlDataAdapter.Dispose();
+            }
+            finally
+            {
+                sqlConnection.Dispose();
+                if (sqlConnection != null)
+                {
+                    sqlConnection.Close();
+                }
+            }
             return dataTable;
         }
         public static void DeleteById(string id, string idName, string tableName)
@@ -45,6 +57,7 @@ namespace Kurirska_Služba.Controllers
                     command.Parameters.Add("@id", SqlDbType.Int).Value = id;
                     command.CommandText = @"Delete from " + tableName + " where " + idName + "= " + "@id";
                     command.ExecuteNonQuery();
+                    command.Dispose();
                 }
             }
             catch (SqlException)
@@ -73,6 +86,7 @@ namespace Kurirska_Služba.Controllers
                 command.Parameters.Add("@id", SqlDbType.Int).Value = id;
                 command.CommandText = @"Delete from " + tableName + " where " + idName + "= " + "@id";
                 command.ExecuteNonQuery();
+                command.Dispose();
                 isComleated = true;
             }
             catch (SqlException)
@@ -90,7 +104,7 @@ namespace Kurirska_Služba.Controllers
         }
         public static void DeleteByValue(string id, string idName, string tableName)
         {
-            SqlConnection connection = CreateConnection(); ;
+            SqlConnection connection = CreateConnection();
             try
             {
                 connection.Open();
@@ -104,6 +118,7 @@ namespace Kurirska_Služba.Controllers
                     command.Parameters.Add("@id", SqlDbType.NVarChar).Value = id;
                     command.CommandText = @"Delete from " + tableName + " where " + idName + "= " + "@id";
                     command.ExecuteNonQuery();
+                    command.Dispose();
                 }
             }
             catch (SqlException)
@@ -132,10 +147,11 @@ namespace Kurirska_Služba.Controllers
                 };
                 command.CommandText = @"select * from " + tableName + " where " + idName + " = '" + id + "'";
                 SqlDataReader reader = command.ExecuteReader();
-                if(!reader.HasRows)
+                if (!reader.HasRows)
                 {
                     isUnique = true;
                 }
+                command.Dispose();
             }
             catch (Exception ex)
             {

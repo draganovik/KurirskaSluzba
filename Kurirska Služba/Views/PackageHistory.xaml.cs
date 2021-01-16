@@ -1,11 +1,11 @@
-﻿using Kurirska_Služba.Controllers;
-using Kurirska_Služba.Forms;
+﻿using KurirskaSluzba.Controllers;
+using KurirskaSluzba.Forms;
 using System.ComponentModel;
 using System.Data;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace Kurirska_Služba.Views
+namespace KurirskaSluzba.Views
 {
     /// <summary>
     /// Interaction logic for PackageHistory.xaml
@@ -29,14 +29,15 @@ namespace Kurirska_Služba.Views
             DataTable dataTable = DatabaseConnection.GetTable(sqlSelect);
             dgPackageHistory.ItemsSource = dataTable.DefaultView;
             dgPackageHistory.Items.SortDescriptions.Add(new SortDescription("ID stanja", ListSortDirection.Descending));
+            dataTable.Dispose();
         }
 
         private void btnShowPackage_Click(object sender, RoutedEventArgs e)
         {
             if (dgPackageHistory.SelectedItem != null)
             {
-                DataRowView item = (DataRowView)dgPackageHistory.SelectedItems[0];
-                WindowManagePackage window = new WindowManagePackage(item) { Owner = Application.Current.MainWindow };
+                DataRowView selectedRow = (DataRowView)dgPackageHistory.SelectedItems[0];
+                WindowManagePackage window = new WindowManagePackage(selectedRow) { Owner = Application.Current.MainWindow };
                 window.ShowDialog();
                 ShowData();
             }

@@ -1,10 +1,10 @@
-﻿using Kurirska_Služba.Controllers;
-using Kurirska_Služba.Forms;
+﻿using KurirskaSluzba.Controllers;
+using KurirskaSluzba.Forms;
 using System.Data;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace Kurirska_Služba.Views
+namespace KurirskaSluzba.Views
 {
     /// <summary>
     /// Interaction logic for Managers.xaml
@@ -16,11 +16,13 @@ namespace Kurirska_Služba.Views
             InitializeComponent();
             ShowData();
         }
+
         public void ShowData()
         {
             string sqlSelect = @"select '@' + KorisnickoIme as 'Korisničko ime', Ime + ' ' + Prezime as Ime, Lokacija, TelefonskiBroj as 'Broj telefona' from tblMenadzer";
             DataTable dataTable = DatabaseConnection.GetTable(sqlSelect);
             dgManagers.ItemsSource = dataTable.DefaultView;
+            dataTable.Dispose();
         }
 
         private void btnChange_Click(object sender, RoutedEventArgs e)
@@ -42,8 +44,8 @@ namespace Kurirska_Služba.Views
         {
             if (dgManagers.SelectedItem != null)
             {
-                DataRowView item = (DataRowView)dgManagers.SelectedItems[0];
-                DatabaseConnection.DeleteByValue(item["Korisničko Ime"].ToString()[1..], "KorisnickoIme", "tblMenadzer");
+                DataRowView selectedRow = (DataRowView)dgManagers.SelectedItems[0];
+                DatabaseConnection.DeleteByValue(selectedRow["Korisničko Ime"].ToString()[1..], "KorisnickoIme", "tblMenadzer");
                 ShowData();
             }
             else
@@ -65,7 +67,7 @@ namespace Kurirska_Služba.Views
             {
                 foreach (Button button in spControls.Children)
                 {
-                    button.IsEnabled = true;
+                    button.IsEnabled = false;
                 }
             }
         }

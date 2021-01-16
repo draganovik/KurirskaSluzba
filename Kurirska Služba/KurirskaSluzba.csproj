@@ -3,9 +3,9 @@
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net5.0-windows</TargetFramework>
-    <RootNamespace>Kurirska_Služba</RootNamespace>
+    <RootNamespace>KurirskaSluzba</RootNamespace>
     <UseWPF>true</UseWPF>
-    <StartupObject>Kurirska_Služba.App</StartupObject>
+    <StartupObject>KurirskaSluzba.App</StartupObject>
     <ApplicationIcon>Assets\ks.ico</ApplicationIcon>
   </PropertyGroup>
 

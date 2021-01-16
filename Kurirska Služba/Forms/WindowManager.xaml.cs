@@ -1,31 +1,32 @@
-﻿using Kurirska_Služba.Controllers;
+﻿using KurirskaSluzba.Controllers;
 using System;
-using System.Data;
 using System.Data.SqlClient;
+using System.Globalization;
 using System.Windows;
 using System.Windows.Input;
 
-namespace Kurirska_Služba.Forms
+namespace KurirskaSluzba.Forms
 {
     /// <summary>
     /// Interaction logic for WindowManager.xaml
     /// </summary>
     public partial class WindowManager : Window
     {
-        SqlConnection sqlConnection = new();
-        bool isEdit = false;
-        string selectedID;
+        private SqlConnection sqlConnection = new();
+        private bool isEdit;
+        private readonly string selectedID;
 
         public WindowManager()
         {
             InitializeComponent();
+            tbxName.Focus();
             setType("add");
         }
+
         public WindowManager(string selectedID, string idName)
         {
             InitializeComponent();
             setType("edit");
-            grdPassword.Visibility = Visibility.Collapsed;
             try
             {
                 sqlConnection = DatabaseConnection.CreateConnection();
@@ -46,11 +47,12 @@ namespace Kurirska_Služba.Forms
                     tbxUsername.Text = reader["KorisnickoIme"].ToString();
                     tbxPassword.Password = "";
                 }
+                command.Dispose();
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Nije moguće očitati vrednosti elementa " + ex.Message, "Izmena nije moguća", MessageBoxButton.OK, MessageBoxImage.Error);
-                this.Close();
+                Close();
             }
             finally
             {
@@ -61,17 +63,20 @@ namespace Kurirska_Služba.Forms
             }
         }
 
-        private void setType(String type)
+        private void setType(string type)
         {
             switch (type)
             {
                 case "edit":
-                    this.Title = "Izmena podataka menadžera";
+                    Title = "Izmena podataka menadžera";
                     btnApply.Content = "Sačuvaj";
+                    grdPassword.Visibility = Visibility.Collapsed;
+                    tbxUsername.IsEnabled = false;
                     isEdit = true;
                     break;
                 case "add":
-                    this.Title = "Dodavanje novog menadžera";
+                default:
+                    Title = "Dodavanje novog menadžera";
                     btnApply.Content = "Napravi nalog";
                     isEdit = false;
                     break;
@@ -82,15 +87,15 @@ namespace Kurirska_Služba.Forms
         private bool hasValidValues()
         {
             bool hasValidUsername = DatabaseConnection.IsUniqueValue(tbxUsername.Text, "KorisnickoIme", "tblMenadzer");
-            if (tbxName.Text.Trim() != "" &&
-            tbxSurname.Text.Trim() != "" &&
-            tbxPhoneNumber.Text.Trim() != "" &&
-            tbxLocation.Text.Trim() != "" &&
-            tbxUsername.Text != "" && hasValidUsername)
+            if (!string.IsNullOrEmpty(tbxName.Text.Trim()) &&
+            !string.IsNullOrEmpty(tbxSurname.Text.Trim()) &&
+            !string.IsNullOrEmpty(tbxPhoneNumber.Text.Trim()) &&
+            !string.IsNullOrEmpty(tbxLocation.Text.Trim()) &&
+            !string.IsNullOrEmpty(tbxUsername.Text) && (hasValidUsername || isEdit))
             {
                 return true;
             }
-            if (hasValidUsername || tbxUsername.Text.Trim() == "")
+            if (hasValidUsername || string.IsNullOrEmpty(tbxUsername.Text.Trim()) || isEdit)
             {
                 MessageBox.Show("Morate popuniti sve informacije.", "Operacija nije sporovedena", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
@@ -120,8 +125,8 @@ namespace Kurirska_Služba.Forms
                     command.Parameters.Add("@KIme", System.Data.SqlDbType.NVarChar).Value = tbxUsername.Text.Trim();
                     if (isEdit)
                     {
-                        command.Parameters.Add("@ImeID", System.Data.SqlDbType.NVarChar).Value = this.selectedID;
-                        command.CommandText = @"Update tblMenadzer set Ime = @Ime, Prezime = @Prezime, TelefonskiBroj = @Telefon, Lokacija = @Lokacija, KorisnickoIme = @KIme where KorisnickoIme = @ImeID";
+                        command.Parameters.Add("@id", System.Data.SqlDbType.Int).Value = Convert.ToInt32(selectedID, new CultureInfo("en-US", false));
+                        command.CommandText = @"Update tblMenadzer set Ime = @Ime, Prezime = @Prezime, TelefonskiBroj = @Telefon, Lokacija = @Lokacija, KorisnickoIme = @KIme where MenadzerID = @id";
                     }
                     else
                     {
@@ -130,11 +135,6 @@ namespace Kurirska_Služba.Forms
                     }
                     command.ExecuteNonQuery();
                     command.Dispose();
-                    if (!isEdit)
-                    {
-                        MessageBox.Show("Operacija uspešno izvršena", "Promena uspešna", MessageBoxButton.OK, MessageBoxImage.Asterisk);
-                    }
-                    ResetInput();
 
                 }
                 catch (Exception ex)
@@ -143,22 +143,14 @@ namespace Kurirska_Služba.Forms
                 }
                 finally
                 {
+                    sqlConnection.Dispose();
                     if (sqlConnection != null)
+                    {
                         sqlConnection.Close();
-                    if (isEdit)
-                        this.Close();
+                        Close();
+                    }
                 }
             }
-        }
-
-        private void ResetInput()
-        {
-            tbxName.Text = "";
-            tbxSurname.Text = "";
-            tbxPhoneNumber.Text = "";
-            tbxLocation.Text = "";
-            tbxUsername.Text = "";
-            tbxPassword.Password = "";
         }
 
         private void tbxUsername_PreviewTextInput(object sender, TextCompositionEventArgs e)

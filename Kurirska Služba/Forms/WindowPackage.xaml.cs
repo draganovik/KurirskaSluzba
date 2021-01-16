@@ -1,4 +1,4 @@
-﻿using Kurirska_Služba.Controllers;
+﻿using KurirskaSluzba.Controllers;
 using System;
 using System.Data;
 using System.Data.SqlClient;
@@ -7,17 +7,17 @@ using System.Threading;
 using System.Windows;
 using System.Windows.Documents;
 
-namespace Kurirska_Služba.Forms
+namespace KurirskaSluzba.Forms
 {
     /// <summary>
     /// Interaction logic for WindowPackage.xaml
     /// </summary>
     public partial class WindowPackage : Window
     {
-        SqlConnection sqlConnection = new();
-        bool isEdit = false;
-        int selectedID;
-        int managerID;
+        private SqlConnection sqlConnection = new();
+        private bool isEdit;
+        private int selectedID;
+        private readonly int managerID;
 
         public WindowPackage()
         {
@@ -26,9 +26,10 @@ namespace Kurirska_Služba.Forms
             EnvironmentSetup();
             setType("add");
         }
+
         public WindowPackage(string managerID) : this()
         {
-            this.managerID = Convert.ToInt32(managerID);
+            this.managerID = Convert.ToInt32(managerID, new CultureInfo("en-US", false));
         }
 
         public WindowPackage(int selectedID) : this()
@@ -63,11 +64,12 @@ namespace Kurirska_Služba.Forms
                     rtbComment.SelectAll();
                     rtbComment.Selection.Text = reader["Napomena"].ToString();
                 }
+                command.Dispose();
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Nije moguće očitati vrednosti elementa " + ex.Message, "Izmena nije moguća", MessageBoxButton.OK, MessageBoxImage.Error);
-                this.Close();
+                Close();
             }
             finally
             {
@@ -84,30 +86,42 @@ namespace Kurirska_Služba.Forms
             {
                 sqlConnection = DatabaseConnection.CreateConnection();
                 sqlConnection.Open();
+
                 // Load Courier Combo Box items
                 string sqlCallCouriers = @"select KurirID, Ime + ' ' + Prezime + ' - ' + Lokacija as Kurir from tblKurir";
-                DataTable dtCouriers = new();
-                SqlDataAdapter sdaCouriers = new(sqlCallCouriers, sqlConnection);
-                sdaCouriers.Fill(dtCouriers);
-                cbxCourier.ItemsSource = dtCouriers.DefaultView;
+                DataTable dataTable = new();
+                SqlDataAdapter dataAdapter = new(sqlCallCouriers, sqlConnection);
+                dataAdapter.Fill(dataTable);
+                cbxCourier.ItemsSource = dataTable.DefaultView;
+                dataTable.Dispose();
+                dataAdapter.Dispose();
+
                 // Load Sender Combo Box items
                 string sqlCallSender = @"select KlijentID, Ime + ' ' + Prezime + ' [@' + KorisnickoIme + ']' as Klijent from tblKlijent";
-                DataTable dtSender = new();
-                SqlDataAdapter sdaSender = new(sqlCallSender, sqlConnection);
-                sdaSender.Fill(dtSender);
-                cbxSender.ItemsSource = dtSender.DefaultView;
+                dataTable = new();
+                dataAdapter = new(sqlCallSender, sqlConnection);
+                dataAdapter.Fill(dataTable);
+                cbxSender.ItemsSource = dataTable.DefaultView;
+                dataTable.Dispose();
+                dataAdapter.Dispose();
+
                 // Load Reciever Combo Box items
                 string sqlCallReceiver = @"select KlijentID, Ime + ' ' + Prezime + ' [@' + KorisnickoIme + ']' as Klijent from tblKlijent";
-                DataTable dtReceiver = new();
-                SqlDataAdapter sdaReceiver = new(sqlCallReceiver, sqlConnection);
-                sdaReceiver.Fill(dtReceiver);
-                cbxReceiver.ItemsSource = dtReceiver.DefaultView;
+                dataTable = new();
+                dataAdapter = new(sqlCallReceiver, sqlConnection);
+                dataAdapter.Fill(dataTable);
+                cbxReceiver.ItemsSource = dataTable.DefaultView;
+                dataTable.Dispose();
+                dataAdapter.Dispose();
+
                 // Load Postage Combo Box items
                 string sqlCallPostage = @"select CenaID, Opis + ' - ' + CONVERT(nvarchar, Cena) + ' RSD' as Postarina from tblCenovnik";
-                DataTable dtPostage = new();
-                SqlDataAdapter sdaPostage = new(sqlCallPostage, sqlConnection);
-                sdaPostage.Fill(dtPostage);
-                cbxPostage.ItemsSource = dtPostage.DefaultView;
+                dataTable = new();
+                dataAdapter = new(sqlCallPostage, sqlConnection);
+                dataAdapter.Fill(dataTable);
+                cbxPostage.ItemsSource = dataTable.DefaultView;
+                dataTable.Dispose();
+                dataAdapter.Dispose();
             }
             catch (Exception ex)
             {
@@ -118,21 +132,24 @@ namespace Kurirska_Služba.Forms
                 // Dispose and Close connection
                 sqlConnection.Dispose();
                 if (sqlConnection != null)
+                {
                     sqlConnection.Close();
+                }
             }
         }
 
-        private void setType(String type)
+        private void setType(string type)
         {
             switch (type)
             {
                 case "edit":
-                    this.Title = "Izmena paketa";
+                    Title = "Izmena paketa";
                     btnApply.Content = "Sačuvaj";
                     isEdit = true;
                     break;
                 case "add":
-                    this.Title = "Dodavanje novog paketa";
+                default:
+                    Title = "Dodavanje novog paketa";
                     btnApply.Content = "Napravi paket";
                     isEdit = false;
                     break;
@@ -141,15 +158,15 @@ namespace Kurirska_Služba.Forms
 
         private bool hasValidValues()
         {
-            if (tbxName.Text != "" &&
-            tbxWeight.Text != "" &&
+            if (!string.IsNullOrEmpty(tbxName.Text) &&
+            !string.IsNullOrEmpty(tbxWeight.Text) &&
             cbxCourier.SelectedIndex != -1 &&
             cbxSender.SelectedIndex != -1 &&
             cbxReceiver.SelectedIndex != -1 &&
-            tbxPickupCity.Text != "" &&
-            tbxPickupAddress.Text != "" &&
-            tbxDropoffCity.Text != "" &&
-            tbxDropoffAddress.Text != "" &&
+            !string.IsNullOrEmpty(tbxPickupCity.Text) &&
+            !string.IsNullOrEmpty(tbxPickupAddress.Text) &&
+            !string.IsNullOrEmpty(tbxDropoffCity.Text) &&
+            !string.IsNullOrEmpty(tbxDropoffAddress.Text) &&
             cbxPostage.SelectedIndex != -1 &&
             dpDropoffDate.SelectedDate != null)
             {
@@ -157,6 +174,86 @@ namespace Kurirska_Služba.Forms
             }
             MessageBox.Show("Morate popuniti sve informacije osim napomene i naplate za paket.", "Operacija nije sporovedena", MessageBoxButton.OK, MessageBoxImage.Warning);
             return false;
+        }
+
+        private int getLatestPackageID()
+        {
+            int id = -1;
+            try
+            {
+                sqlConnection = DatabaseConnection.CreateConnection();
+                sqlConnection.Open();
+                SqlCommand command = new SqlCommand
+                {
+                    Connection = sqlConnection
+                };
+                sqlConnection = DatabaseConnection.CreateConnection();
+                sqlConnection.Open();
+                command.CommandText = @"SELECT MAX(PosiljkaID) FROM tblPosiljka";
+                SqlDataReader reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    id = Convert.ToInt32(reader[0], new CultureInfo("en-US", false));
+                }
+                command.Dispose();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Promene nisu sačuvane zbog sledećeg problema u izvršavanju operacije: \n" + ex.Message, "Operacija je neuspešna", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                if (sqlConnection != null)
+                {
+                    sqlConnection.Close();
+                }
+            }
+            return id;
+        }
+
+        private void createInitialPackageState()
+        {
+            try
+            {
+                sqlConnection = DatabaseConnection.CreateConnection();
+                sqlConnection.Open();
+                SqlCommand command = new()
+                {
+                    Connection = sqlConnection
+                };
+                command.Parameters.Add("@Posiljka", SqlDbType.Int).Value = selectedID;
+                command.Parameters.Add("@Vreme", SqlDbType.DateTime).Value = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.CurrentCulture);
+                command.Parameters.Add("@Stanje", SqlDbType.Int).Value = 1;
+                command.Parameters.Add("@Komentar", SqlDbType.NVarChar).Value = "Paket je kreiran";
+                command.CommandText =
+                        @"insert tblStanjePosiljke (
+                        PosiljkaID,
+                        VrstaStanjaID,
+                        Komentar,
+                        Vreme
+                    )values(
+                        @Posiljka,
+                        @Stanje,
+                        @Komentar,
+                        @Vreme
+                    )";
+                command.ExecuteNonQuery();
+                command.Dispose();
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Promene nisu sačuvane zbog sledećeg problema u izvršavanju operacije: \n" + ex.Message, "Operacija je neuspešna", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                if (sqlConnection != null)
+                {
+                    sqlConnection.Close();
+                }
+
+                Close();
+            }
         }
 
         private void btnApply_Click(object sender, RoutedEventArgs e)
@@ -172,27 +269,26 @@ namespace Kurirska_Služba.Forms
                     {
                         Connection = sqlConnection
                     };
-                    command.Parameters.Add("@Naziv", System.Data.SqlDbType.NVarChar).Value = tbxName.Text.Trim();
-                    command.Parameters.Add("@Tezina", System.Data.SqlDbType.Int).Value = tbxWeight.Text.Trim();
-                    command.Parameters.Add("@Menadzer", System.Data.SqlDbType.Int).Value = this.managerID;
-                    command.Parameters.Add("@Kurir", System.Data.SqlDbType.Int).Value = cbxCourier.SelectedValue;
-                    command.Parameters.Add("@Posiljalac", System.Data.SqlDbType.Int).Value = cbxSender.SelectedValue;
-                    command.Parameters.Add("@Primalac", System.Data.SqlDbType.Int).Value = cbxReceiver.SelectedValue;
-                    command.Parameters.Add("@GradPreuzimanja", System.Data.SqlDbType.NVarChar).Value = tbxPickupCity.Text.Trim();
-                    command.Parameters.Add("@AdresaPreuzimanja", System.Data.SqlDbType.NVarChar).Value = tbxPickupAddress.Text.Trim();
-                    command.Parameters.Add("@GradDostave", System.Data.SqlDbType.NVarChar).Value = tbxDropoffCity.Text.Trim();
-                    command.Parameters.Add("@AdresaDostave", System.Data.SqlDbType.NVarChar).Value = tbxDropoffAddress.Text.Trim();
-                    command.Parameters.Add("@Postarina", System.Data.SqlDbType.Int).Value = cbxPostage.SelectedValue;
-                    command.Parameters.Add("@Doplata", System.Data.SqlDbType.Money).Value = Convert.ToDouble(tbxRansom.Text.Trim() == "" ? 0 : tbxRansom.Text.Trim());
-                    command.Parameters.Add("@VremeDostave", System.Data.SqlDbType.DateTime).Value = ((DateTime)dpDropoffDate.SelectedDate).ToString("yyyy-MM-dd", CultureInfo.CurrentCulture);
-                    command.Parameters.Add("@Napomena", System.Data.SqlDbType.NVarChar).Value = new TextRange(rtbComment.Document.ContentStart, rtbComment.Document.ContentEnd).Text.Trim();
+                    command.Parameters.Add("@Naziv", SqlDbType.NVarChar).Value = tbxName.Text.Trim();
+                    command.Parameters.Add("@Tezina", SqlDbType.Int).Value = tbxWeight.Text.Trim();
+                    command.Parameters.Add("@Menadzer", SqlDbType.Int).Value = managerID;
+                    command.Parameters.Add("@Kurir", SqlDbType.Int).Value = cbxCourier.SelectedValue;
+                    command.Parameters.Add("@Posiljalac", SqlDbType.Int).Value = cbxSender.SelectedValue;
+                    command.Parameters.Add("@Primalac", SqlDbType.Int).Value = cbxReceiver.SelectedValue;
+                    command.Parameters.Add("@GradPreuzimanja", SqlDbType.NVarChar).Value = tbxPickupCity.Text.Trim();
+                    command.Parameters.Add("@AdresaPreuzimanja", SqlDbType.NVarChar).Value = tbxPickupAddress.Text.Trim();
+                    command.Parameters.Add("@GradDostave", SqlDbType.NVarChar).Value = tbxDropoffCity.Text.Trim();
+                    command.Parameters.Add("@AdresaDostave", SqlDbType.NVarChar).Value = tbxDropoffAddress.Text.Trim();
+                    command.Parameters.Add("@Postarina", SqlDbType.Int).Value = cbxPostage.SelectedValue;
+                    command.Parameters.Add("@Doplata", SqlDbType.Money).Value = Convert.ToDouble(string.IsNullOrEmpty(tbxRansom.Text.Trim()) ? 0 : tbxRansom.Text.Trim(), new CultureInfo("en-US", false));
+                    command.Parameters.Add("@VremeDostave", SqlDbType.DateTime).Value = ((DateTime)dpDropoffDate.SelectedDate).ToString("yyyy-MM-dd", CultureInfo.CurrentCulture);
+                    command.Parameters.Add("@Napomena", SqlDbType.NVarChar).Value = new TextRange(rtbComment.Document.ContentStart, rtbComment.Document.ContentEnd).Text.Trim();
                     if (isEdit)
                     {
-                        command.Parameters.Add("@id", System.Data.SqlDbType.Int).Value = selectedID;
-                        command.CommandText = @"Update tblPosiljka set 
+                        command.Parameters.Add("@id", SqlDbType.Int).Value = selectedID;
+                        command.CommandText = @"update tblPosiljka set 
                         Naziv = @Naziv,
                         Tezina = @Tezina,
-                        DodeljenMenadzerID = @Menadzer,
                         DodeljenPosiljalacID = @Posiljalac,
                         DodeljenPrimalacID = @Primalac,
                         DodeljenKurirID = @Kurir,
@@ -255,111 +351,23 @@ namespace Kurirska_Služba.Forms
                 }
                 finally
                 {
+                    sqlConnection.Dispose();
                     if (sqlConnection != null)
                     {
                         sqlConnection.Close();
                         if (isValid)
                         {
                             Thread.Sleep(200);
-                            this.selectedID = getLatestPackageID();
+                            selectedID = getLatestPackageID();
                             if (selectedID > -1)
+                            {
                                 createInitialPackageState();
+                            }
                         }
+                        Close();
                     }
-                    this.Close();
                 }
             }
-        }
-
-        private void createInitialPackageState()
-        {
-            try
-            {
-                sqlConnection = DatabaseConnection.CreateConnection();
-                sqlConnection.Open();
-                SqlCommand command = new()
-                {
-                    Connection = sqlConnection
-                };
-                command.Parameters.Add("@Posiljka", System.Data.SqlDbType.Int).Value = selectedID;
-                command.Parameters.Add("@Vreme", System.Data.SqlDbType.DateTime).Value = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.CurrentCulture);
-                command.Parameters.Add("@Stanje", System.Data.SqlDbType.Int).Value = 1;
-                command.Parameters.Add("@Komentar", System.Data.SqlDbType.NVarChar).Value = "Paket je kreiran";
-                command.CommandText =
-                        @"insert tblStanjePosiljke (
-                        PosiljkaID,
-                        VrstaStanjaID,
-                        Komentar,
-                        Vreme
-                    )values(
-                        @Posiljka,
-                        @Stanje,
-                        @Komentar,
-                        @Vreme
-                    )";
-                command.ExecuteNonQuery();
-                command.Dispose();
-
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Promene nisu sačuvane zbog sledećeg problema u izvršavanju operacije: \n" + ex.Message, "Operacija je neuspešna", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-            finally
-            {
-                if (sqlConnection != null)
-                    sqlConnection.Close();
-                this.Close();
-            }
-        }
-
-        private int getLatestPackageID()
-        {
-            int id = -1;
-            try
-            {
-                sqlConnection = DatabaseConnection.CreateConnection();
-                sqlConnection.Open();
-                SqlCommand command = new SqlCommand
-                {
-                    Connection = sqlConnection
-                };
-                sqlConnection = DatabaseConnection.CreateConnection();
-                sqlConnection.Open();
-                command.CommandText = @"SELECT MAX(PosiljkaID) FROM tblPosiljka";
-                SqlDataReader reader = command.ExecuteReader();
-                while (reader.Read())
-                {
-                    id = Convert.ToInt32(reader[0]);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Promene nisu sačuvane zbog sledećeg problema u izvršavanju operacije: \n" + ex.Message, "Operacija je neuspešna", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-            finally
-            {
-                if (sqlConnection != null)
-                    sqlConnection.Close();
-            }
-            return id;
-        }
-
-        private void ResetInput()
-        {
-            tbxName.Text = "";
-            tbxWeight.Text = "";
-            cbxCourier.SelectedIndex = -1;
-            cbxSender.SelectedIndex = -1;
-            cbxReceiver.SelectedIndex = -1;
-            tbxPickupCity.Text = "";
-            tbxPickupAddress.Text = "";
-            tbxDropoffCity.Text = "";
-            tbxDropoffAddress.Text = "";
-            cbxPostage.SelectedIndex = -1;
-            tbxRansom.Text = "";
-            dpDropoffDate.SelectedDate = null;
-            rtbComment.Document = new();
         }
 
         private void cbxSender_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
@@ -382,6 +390,7 @@ namespace Kurirska_Služba.Forms
                     tbxPickupAddress.Text = reader["Adresa"].ToString();
 
                 }
+                command.Dispose();
             }
             catch
             {
@@ -409,6 +418,7 @@ namespace Kurirska_Služba.Forms
                     tbxDropoffAddress.Text = reader["Adresa"].ToString();
 
                 }
+                command.Dispose();
             }
             catch
             {

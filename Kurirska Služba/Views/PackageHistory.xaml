@@ -1,9 +1,9 @@
-﻿<UserControl x:Class="Kurirska_Služba.Views.PackageHistory"
+﻿<UserControl x:Class="KurirskaSluzba.Views.PackageHistory"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:Kurirska_Služba.Views"
+             xmlns:local="clr-namespace:KurirskaSluzba.Views"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
@@ -12,7 +12,7 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <StackPanel x:Name="spControls" Grid.Row="0" Orientation="Horizontal" FlowDirection="RightToLeft">
-            <Button x:Name="btnShowPackage" Click="btnShowPackage_Click" IsEnabled="False">Prikaži paket</Button>
+            <Button x:Name="btnShowPackage" Click="btnShowPackage_Click" IsEnabled="False">Prikaži stanje</Button>
         </StackPanel>
         <DataGrid ColumnWidth="*"  Grid.Row="1" x:Name="dgPackageHistory" SelectionMode="Single" SelectionUnit="FullRow" IsReadOnly="True" AlternationCount="2" CanUserAddRows="False" SelectionChanged="dgPackageHistory_SelectionChanged">
         </DataGrid>

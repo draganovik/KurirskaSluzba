@@ -3,65 +3,46 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
-namespace Kurirska_Služba.CustomControls
+namespace KurirskaSluzba.CustomControls
 {
     /// <summary>
     /// Interaction logic for CardPackage.xaml
     /// </summary>
     public partial class CardPackage : UserControl
     {
-        private int PackageID = -1;
         public CardPackage()
         {
             InitializeComponent();
         }
 
-        public CardPackage(int id, String name, int weight, String routeFrom, String routeTo, String status)
+        public int ID { get; private set; } = -1;
+
+        public CardPackage(int id, string name, int weight, string routeFrom, string routeTo, string status)
         {
             InitializeComponent();
             Update(id, name, weight, routeFrom, routeTo, status);
         }
 
-        public void Update(int id, String name, int weight, String routeFrom, String routeTo, String status)
+        public void Update(int id, string name, int weight, string routeFrom, string routeTo, string status)
         {
             lbName.Content = name;
             lbRouteFrom.Content = routeFrom;
             lbRouteTo.Content = routeTo;
             lbStatus.Content = status;
-            setID(id);
-            setImage(weight);
+            ID = id;
+            SetImage(weight);
         }
 
-        public void setImage(int weight)
+        public void SetImage(int weight)
         {
-            // TODO: Image setup logic
-            BitmapImage bitmapImage;
-            switch (weight)
+            BitmapImage bitmapImage = weight switch
             {
-                case <= 600:
-                    bitmapImage = new BitmapImage(new Uri(@"pack://application:,,/Assets\letter_small.png", UriKind.Absolute));
-                    break;
-                case <= 1200:
-                    bitmapImage = new BitmapImage(new Uri(@"pack://application:,,/Assets\letter_large.png", UriKind.Absolute));
-                    break;
-                case <= 5000:
-                    bitmapImage = new BitmapImage(new Uri(@"pack://application:,,/Assets\box_small.png", UriKind.Absolute));
-                    break;
-                default:
-                    bitmapImage = new BitmapImage(new Uri(@"pack://application:,,/Assets\box_large.png", UriKind.Absolute));
-                    break;
-            }
+                <= 600 => new BitmapImage(new Uri(@"pack://application:,,/Assets\letter_small.png", UriKind.Absolute)),
+                <= 1200 => new BitmapImage(new Uri(@"pack://application:,,/Assets\letter_large.png", UriKind.Absolute)),
+                <= 5000 => new BitmapImage(new Uri(@"pack://application:,,/Assets\box_small.png", UriKind.Absolute)),
+                _ => new BitmapImage(new Uri(@"pack://application:,,/Assets\box_large.png", UriKind.Absolute)),
+            };
             brdImage.Background = new ImageBrush(bitmapImage);
-        }
-
-        private void setID(int id)
-        {
-            PackageID = id;
-        }
-
-        public int getID()
-        {
-            return PackageID;
         }
     }
 }

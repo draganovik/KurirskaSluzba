@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace Kurirska_Služba
+namespace KurirskaSluzba
 {
     /// <summary>
     /// Interaction logic for App.xaml

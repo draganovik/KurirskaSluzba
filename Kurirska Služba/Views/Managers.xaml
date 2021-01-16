@@ -1,9 +1,9 @@
-﻿<UserControl x:Class="Kurirska_Služba.Views.Managers"
+﻿<UserControl x:Class="KurirskaSluzba.Views.Managers"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:Kurirska_Služba.Views"
+             xmlns:local="clr-namespace:KurirskaSluzba.Views"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
@@ -14,8 +14,8 @@
         <DataGrid ColumnWidth="*" x:Name="dgManagers" Grid.Row="1" SelectionMode="Single" SelectionUnit="FullRow" IsReadOnly="True" AlternationCount="2" CanUserAddRows="False" SelectionChanged="dgManagers_SelectionChanged" >
         </DataGrid>
         <StackPanel x:Name="spControls" Grid.Row="0" Orientation="Horizontal" FlowDirection="RightToLeft">
-            <Button x:Name="btnChange" Click="btnChange_Click" IsEnabled="False">Izmeni</Button>
-            <Button x:Name="btnDelete" Click="btnDelete_Click" UseLayoutRounding="False" IsEnabled="False">Obriši</Button>
+            <Button x:Name="btnChange" Click="btnChange_Click" IsEnabled="False">Izmeni podatke</Button>
+            <Button x:Name="btnDelete" Click="btnDelete_Click" UseLayoutRounding="False" IsEnabled="False">Obriši menadžera</Button>
         </StackPanel>
     </Grid>
 </UserControl>

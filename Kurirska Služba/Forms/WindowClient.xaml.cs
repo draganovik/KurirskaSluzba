@@ -1,32 +1,33 @@
-﻿using Kurirska_Služba.Controllers;
+﻿using KurirskaSluzba.Controllers;
 using System;
 using System.Data;
 using System.Data.SqlClient;
 using System.Windows;
 using System.Windows.Input;
 
-namespace Kurirska_Služba.Forms
+namespace KurirskaSluzba.Forms
 {
     /// <summary>
     /// Interaction logic for WindowClient.xaml
     /// </summary>
     public partial class WindowClient : Window
     {
-        SqlConnection sqlConnection = new();
-        bool isEdit = false;
-        string selectedID;
+        private SqlConnection sqlConnection = new();
+        private bool isEdit;
+        private readonly string selectedID;
+
         public WindowClient()
         {
             InitializeComponent();
+            tbxName.Focus();
             setType("add");
 
         }
 
-        public WindowClient(String selectedID)
+        public WindowClient(string selectedID)
         {
             InitializeComponent();
             setType("edit");
-            tbxPassword.IsEnabled = false;
             try
             {
                 sqlConnection = DatabaseConnection.CreateConnection();
@@ -49,11 +50,12 @@ namespace Kurirska_Služba.Forms
                     tbxUsername.Text = reader["KorisnickoIme"].ToString();
                     tbxPassword.Password = "";
                 }
+                command.Dispose();
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Nije moguće očitati vrednosti elementa " + ex.Message, "Izmena nije moguća", MessageBoxButton.OK, MessageBoxImage.Error);
-                this.Close();
+                Close();
             }
             finally
             {
@@ -64,17 +66,20 @@ namespace Kurirska_Služba.Forms
             }
         }
 
-        private void setType(String type)
+        private void setType(string type)
         {
             switch (type)
             {
                 case "edit":
-                    this.Title = "Izmena podataka klijenta";
+                    Title = "Izmena podataka klijenta";
                     btnApply.Content = "Sačuvaj";
+                    grdPassword.Visibility = Visibility.Collapsed;
+                    tbxUsername.IsEnabled = false;
                     isEdit = true;
                     break;
                 case "add":
-                    this.Title = "Dodavanje novog klijenta";
+                default:
+                    Title = "Dodavanje novog klijenta";
                     btnApply.Content = "Napravi nalog";
                     isEdit = false;
                     break;
@@ -82,31 +87,19 @@ namespace Kurirska_Služba.Forms
 
         }
 
-        private void ResetInput()
-        {
-            tbxName.Text = "";
-            tbxSurname.Text = "";
-            tbxPhoneNumber.Text = "";
-            tbxCity.Text = "";
-            tbxAddress.Text = "";
-            tbxUsername.Text = "";
-            tbxPassword.Password = "";
-        }
-
         private bool hasValidValues()
         {
             bool hasValidUsername = DatabaseConnection.IsUniqueValue(tbxUsername.Text, "KorisnickoIme", "tblKlijent");
-            if (tbxName.Text.Trim() != "" &&
-            tbxSurname.Text.Trim() != "" &&
-            tbxPhoneNumber.Text.Trim() != "" &&
-            tbxCity.Text.Trim() != "" &&
-            tbxAddress.Text.Trim() != "" &&
-            tbxUsername.Text != "" &&
-            tbxPassword.Password != "" && hasValidUsername)
+            if (!string.IsNullOrEmpty(tbxName.Text.Trim()) &&
+            !string.IsNullOrEmpty(tbxSurname.Text.Trim()) &&
+            !string.IsNullOrEmpty(tbxPhoneNumber.Text.Trim()) &&
+            !string.IsNullOrEmpty(tbxCity.Text.Trim()) &&
+            !string.IsNullOrEmpty(tbxAddress.Text.Trim()) &&
+            !string.IsNullOrEmpty(tbxUsername.Text.Trim()) && (hasValidUsername || isEdit))
             {
                 return true;
             }
-            if(hasValidUsername || tbxUsername.Text.Trim() == "")
+            if (hasValidUsername || string.IsNullOrEmpty(tbxUsername.Text.Trim()) || isEdit)
             {
                 MessageBox.Show("Morate popuniti sve informacije.", "Operacija nije sporovedena", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
@@ -129,29 +122,24 @@ namespace Kurirska_Služba.Forms
                     {
                         Connection = sqlConnection
                     };
-                    command.Parameters.Add("@Ime", System.Data.SqlDbType.NVarChar).Value = tbxName.Text.Trim();
-                    command.Parameters.Add("@Prezime", System.Data.SqlDbType.NVarChar).Value = tbxSurname.Text.Trim();
-                    command.Parameters.Add("@Telefon", System.Data.SqlDbType.NVarChar).Value = tbxPhoneNumber.Text.Trim();
-                    command.Parameters.Add("@Grad", System.Data.SqlDbType.NVarChar).Value = tbxCity.Text.Trim();
-                    command.Parameters.Add("@Adresa", System.Data.SqlDbType.NVarChar).Value = tbxAddress.Text.Trim();
-                    command.Parameters.Add("@KIme", System.Data.SqlDbType.NVarChar).Value = tbxUsername.Text.Trim();
+                    command.Parameters.Add("@Ime", SqlDbType.NVarChar).Value = tbxName.Text.Trim();
+                    command.Parameters.Add("@Prezime", SqlDbType.NVarChar).Value = tbxSurname.Text.Trim();
+                    command.Parameters.Add("@Telefon", SqlDbType.NVarChar).Value = tbxPhoneNumber.Text.Trim();
+                    command.Parameters.Add("@Grad", SqlDbType.NVarChar).Value = tbxCity.Text.Trim();
+                    command.Parameters.Add("@Adresa", SqlDbType.NVarChar).Value = tbxAddress.Text.Trim();
+                    command.Parameters.Add("@KIme", SqlDbType.NVarChar).Value = tbxUsername.Text.Trim();
                     if (isEdit)
                     {
-                        command.Parameters.Add("@ImeID", System.Data.SqlDbType.NVarChar).Value = this.selectedID;
+                        command.Parameters.Add("@ImeID", SqlDbType.NVarChar).Value = selectedID;
                         command.CommandText = @"Update tblKlijent set Ime = @Ime, Prezime = @Prezime, TelefonskiBroj = @Telefon, Grad = @Grad, Adresa = @Adresa, KorisnickoIme = @KIme where KorisnickoIme = @ImeID";
                     }
                     else
                     {
-                        command.Parameters.Add("@KLozinka", System.Data.SqlDbType.NVarChar).Value = PasswordHasher.Encode(tbxPassword.Password);
+                        command.Parameters.Add("@KLozinka", SqlDbType.NVarChar).Value = PasswordHasher.Encode(tbxPassword.Password);
                         command.CommandText = @"Insert into tblKlijent(Ime, Prezime, TelefonskiBroj, Grad, Adresa, KorisnickaLozinka, KorisnickoIme) values(@Ime, @Prezime, @Telefon, @Grad, @Adresa, @KLozinka, @KIme)";
                     }
                     command.ExecuteNonQuery();
                     command.Dispose();
-                    if (!isEdit)
-                    {
-                        MessageBox.Show("Operacija uspešno izvršena", "Promena uspešna", MessageBoxButton.OK, MessageBoxImage.Asterisk);
-                    }
-                    ResetInput();
 
                 }
                 catch (Exception ex)
@@ -160,10 +148,12 @@ namespace Kurirska_Služba.Forms
                 }
                 finally
                 {
+                    sqlConnection.Dispose();
                     if (sqlConnection != null)
+                    {
                         sqlConnection.Close();
-                    if (isEdit)
-                        this.Close();
+                        Close();
+                    }
                 }
             }
         }

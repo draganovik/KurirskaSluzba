@@ -1,9 +1,9 @@
-﻿<Window x:Class="Kurirska_Služba.Forms.WindowCourier"
+﻿<Window x:Class="KurirskaSluzba.Forms.WindowCourier"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Kurirska_Služba.Forms"
+        xmlns:local="clr-namespace:KurirskaSluzba.Forms"
         mc:Ignorable="d"
         Title="WindowCourier" Width="500" Height="360" ResizeMode="NoResize" WindowStartupLocation="CenterOwner">
     <ScrollViewer VerticalScrollBarVisibility="Auto">
@@ -48,12 +48,12 @@
                 <Label Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Center">Korisničko ime</Label>
                 <TextBox x:Name="tbxUsername" Grid.Column="1" PreviewTextInput="tbxUsername_PreviewTextInput" MaxLength="16"/>
             </Grid>
-            <Grid>
+            <Grid x:Name="grdPassword">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="160"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <Label Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Center">Jednokratna lozinka</Label>
+                <Label Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Center">Dodeli lozinku</Label>
                 <PasswordBox x:Name="tbxPassword" Grid.Column="1" MaxLength="50" />
             </Grid>
             <Grid Margin="0,20,0,0">

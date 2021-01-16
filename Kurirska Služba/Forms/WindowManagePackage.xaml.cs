@@ -1,4 +1,4 @@
-﻿using Kurirska_Služba.Controllers;
+﻿using KurirskaSluzba.Controllers;
 using System;
 using System.Data;
 using System.Data.SqlClient;
@@ -6,20 +6,21 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Documents;
 
-namespace Kurirska_Služba.Forms
+namespace KurirskaSluzba.Forms
 {
     /// <summary>
     /// Interaction logic for WindowManagePackage.xaml
     /// </summary>
     public partial class WindowManagePackage : Window
     {
-        SqlConnection sqlConnection = new();
+        private SqlConnection sqlConnection = new();
         private int selectedID;
         private string currentStateName;
 
         public WindowManagePackage()
         {
             InitializeComponent();
+            rtbComment.Focus();
         }
 
         public WindowManagePackage(int selectedID) : this()
@@ -33,8 +34,12 @@ namespace Kurirska_Služba.Forms
         public WindowManagePackage(DataRowView item) : this()
         {
             EnvironmentSetup();
-            var packageName = item["Ime pošiljke"].ToString();
-            this.selectedID = Convert.ToInt32(packageName.Substring(1, packageName.IndexOf(' ')));
+            if (item == null)
+            {
+                throw new ArgumentNullException(nameof(item), "Passed DataGridView in a null");
+            }
+            string packageName = item["Ime pošiljke"].ToString();
+            selectedID = Convert.ToInt32(packageName.Substring(1, packageName.IndexOf(' ', StringComparison.Ordinal)), new CultureInfo("en-US", false));
             cbxPackageState.IsEnabled = false;
             FillDataPackageState(selectedID);
             FillDataPackage(selectedID);
@@ -60,7 +65,9 @@ namespace Kurirska_Služba.Forms
                 DataTable dtState = new();
                 SqlDataAdapter sdaCouriers = new(sqlCallState, sqlConnection);
                 sdaCouriers.Fill(dtState);
-                this.cbxPackageState.ItemsSource = dtState.DefaultView;
+                cbxPackageState.ItemsSource = dtState.DefaultView;
+                dtState.Dispose();
+                sdaCouriers.Dispose();
             }
             catch (Exception ex)
             {
@@ -71,7 +78,9 @@ namespace Kurirska_Služba.Forms
                 // Dispose and Close connection
                 sqlConnection.Dispose();
                 if (sqlConnection != null)
+                {
                     sqlConnection.Close();
+                }
             }
         }
 
@@ -91,18 +100,19 @@ namespace Kurirska_Služba.Forms
                 SqlDataReader reader = command.ExecuteReader();
                 while (reader.Read())
                 {
-                    this.cbxPackageState.SelectedValue = reader["VrstaStanjaID"];
+                    cbxPackageState.SelectedValue = reader["VrstaStanjaID"];
                     currentStateName = cbxPackageState.Text;
                 }
-                if (this.cbxPackageState.SelectedIndex < cbxPackageState.Items.Count - 2 && cbxPackageState.IsEnabled)
+                if (cbxPackageState.SelectedIndex < cbxPackageState.Items.Count - 2 && cbxPackageState.IsEnabled)
                 {
-                    this.cbxPackageState.SelectedIndex++;
+                    cbxPackageState.SelectedIndex++;
                 }
+                command.Dispose();
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Nije moguće očitati vrednosti elementa " + ex.Message, "Upravljanje nije moguće", MessageBoxButton.OK, MessageBoxImage.Error);
-                this.Close();
+                Close();
             }
             finally
             {
@@ -129,20 +139,21 @@ namespace Kurirska_Služba.Forms
                 SqlDataReader reader = command.ExecuteReader();
                 while (reader.Read())
                 {
-                    this.ccManagedCardPackage.Update(
-                        Convert.ToInt32(reader["PosiljkaID"]),
+                    ccManagedCardPackage.Update(
+                        Convert.ToInt32(reader["PosiljkaID"], new CultureInfo("en-US", false)),
                         reader["Ime"].ToString(),
-                        Convert.ToInt32(reader["Tezina"]),
+                        Convert.ToInt32(reader["Tezina"], new CultureInfo("en-US", false)),
                         reader["Preuzimanje"].ToString(),
                         reader["Dostava"].ToString(),
                         currentStateName);
-                    this.Title = "Pošiljka: " + reader["Ime"].ToString();
+                    Title = "Pošiljka: " + reader["Ime"].ToString();
                 }
+                command.Dispose();
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Nije moguće očitati vrednosti elementa " + ex.Message, "Upravljanje nije moguće", MessageBoxButton.OK, MessageBoxImage.Error);
-                this.Close();
+                Close();
             }
             finally
             {
@@ -163,10 +174,10 @@ namespace Kurirska_Služba.Forms
                 {
                     Connection = sqlConnection
                 };
-                command.Parameters.Add("@Posiljka", System.Data.SqlDbType.Int).Value = selectedID;
-                command.Parameters.Add("@Vreme", System.Data.SqlDbType.DateTime).Value = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.CurrentCulture);
-                command.Parameters.Add("@Stanje", System.Data.SqlDbType.Int).Value = cbxPackageState.SelectedValue;
-                command.Parameters.Add("@Komentar", System.Data.SqlDbType.NVarChar).Value = new TextRange(rtbComment.Document.ContentStart, rtbComment.Document.ContentEnd).Text.Trim();
+                command.Parameters.Add("@Posiljka", SqlDbType.Int).Value = selectedID;
+                command.Parameters.Add("@Vreme", SqlDbType.DateTime).Value = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.CurrentCulture);
+                command.Parameters.Add("@Stanje", SqlDbType.Int).Value = cbxPackageState.SelectedValue;
+                command.Parameters.Add("@Komentar", SqlDbType.NVarChar).Value = new TextRange(rtbComment.Document.ContentStart, rtbComment.Document.ContentEnd).Text.Trim();
                 command.CommandText =
                         @"insert tblStanjePosiljke (
                         PosiljkaID,
@@ -189,9 +200,12 @@ namespace Kurirska_Služba.Forms
             }
             finally
             {
+                sqlConnection.Dispose();
                 if (sqlConnection != null)
+                {
                     sqlConnection.Close();
-                this.Close();
+                    Close();
+                }
             }
         }
     }

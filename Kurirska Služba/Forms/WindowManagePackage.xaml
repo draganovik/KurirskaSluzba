@@ -1,9 +1,9 @@
-﻿<Window x:Class="Kurirska_Služba.Forms.WindowManagePackage"
+﻿<Window x:Class="KurirskaSluzba.Forms.WindowManagePackage"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Kurirska_Služba.Forms" xmlns:customcontrols="clr-namespace:Kurirska_Služba.CustomControls"
+        xmlns:customcontrols="clr-namespace:KurirskaSluzba.CustomControls"
         mc:Ignorable="d"
         Title="Manage Package"  Width="460" Height="340" ResizeMode="NoResize" WindowStartupLocation="CenterOwner">
     <Grid>

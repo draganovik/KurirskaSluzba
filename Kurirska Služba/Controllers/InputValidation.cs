@@ -1,8 +1,8 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace Kurirska_Služba.Controllers
+namespace KurirskaSluzba.Controllers
 {
-    class InputValidation
+    internal class InputValidation
     {
         public static bool IsTextASCII(string str)
         {

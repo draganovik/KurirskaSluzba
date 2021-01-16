@@ -1,11 +1,12 @@
-﻿using Kurirska_Služba.Controllers;
-using Kurirska_Služba.Forms;
+﻿using KurirskaSluzba.Controllers;
+using KurirskaSluzba.Forms;
 using System;
 using System.Data;
+using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace Kurirska_Služba.Views
+namespace KurirskaSluzba.Views
 {
     /// <summary>
     /// Interaction logic for Prices.xaml
@@ -23,6 +24,7 @@ namespace Kurirska_Služba.Views
             string sqlSelect = @"select CenaID as 'Cena ID', Opis, CAST(Cena as numeric(17,2)) from tblCenovnik";
             DataTable dataTable = DatabaseConnection.GetTable(sqlSelect);
             dgPrices.ItemsSource = dataTable.DefaultView;
+            dataTable.Dispose();
         }
 
         private void btnChange_Click(object sender, RoutedEventArgs e)
@@ -30,7 +32,7 @@ namespace Kurirska_Služba.Views
             if (dgPrices.SelectedItem != null)
             {
                 DataRowView selectedRow = (DataRowView)dgPrices.SelectedItems[0];
-                WindowPrice window = new WindowPrice(Convert.ToInt32(selectedRow["Cena ID"])) { Owner = Application.Current.MainWindow };
+                WindowPrice window = new WindowPrice(Convert.ToInt32(selectedRow["Cena ID"], new CultureInfo("en-US", false))) { Owner = Application.Current.MainWindow };
                 window.ShowDialog();
                 ShowData();
             }
@@ -44,8 +46,8 @@ namespace Kurirska_Služba.Views
         {
             if (dgPrices.SelectedItem != null)
             {
-                DataRowView id = (DataRowView)dgPrices.SelectedItems[0];
-                DatabaseConnection.DeleteById(id["Cena ID"].ToString(), "CenaID", "tblCenovnik");
+                DataRowView dataRow = (DataRowView)dgPrices.SelectedItems[0];
+                DatabaseConnection.DeleteById(dataRow["Cena ID"].ToString(), "CenaID", "tblCenovnik");
                 ShowData();
             }
             else

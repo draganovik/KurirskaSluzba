@@ -1,9 +1,9 @@
-﻿<Window x:Class="Kurirska_Služba.Login"
+﻿<Window x:Class="KurirskaSluzba.Login"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Kurirska_Služba"
+        xmlns:local="clr-namespace:KurirskaSluzba"
         mc:Ignorable="d"
         Title="Kurirska Služba Login" Height="440" Width="400" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
     <Grid>

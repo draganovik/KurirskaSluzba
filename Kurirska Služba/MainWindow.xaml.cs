@@ -1,4 +1,4 @@
-﻿using Kurirska_Služba.Forms;
+﻿using KurirskaSluzba.Forms;
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -6,44 +6,40 @@ using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace Kurirska_Služba
+namespace KurirskaSluzba
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
     {
-        string managerID = "";
+        private readonly string managerID = "";
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1810:Initialize reference type static fields inline", Justification = "<Pending>")]
         static MainWindow()
         {
             _menuDropAlignmentField = typeof(SystemParameters).GetField("_menuDropAlignment", BindingFlags.NonPublic | BindingFlags.Static);
-            System.Diagnostics.Debug.Assert(_menuDropAlignmentField != null);
+            Debug.Assert(_menuDropAlignmentField != null);
 
             EnsureStandardPopupAlignment();
             SystemParameters.StaticPropertyChanged += SystemParameters_StaticPropertyChanged;
         }
+
         public MainWindow(string managerID) : base()
         {
             InitializeComponent();
             this.managerID = managerID;
         }
 
-        #region Menubar fix
-        private static readonly FieldInfo _menuDropAlignmentField;
-
-        private static void SystemParameters_StaticPropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void updateViews()
         {
-            EnsureStandardPopupAlignment();
+            viewPackageHistory.ShowData();
+            viewPackages.ShowData();
+            viewCouriers.ShowData();
+            viewClients.ShowData();
+            viewManagers.ShowData();
+            viewPrices.ShowData();
         }
-
-        private static void EnsureStandardPopupAlignment()
-        {
-            if (SystemParameters.MenuDropAlignment && _menuDropAlignmentField != null)
-            {
-                _menuDropAlignmentField.SetValue(null, false);
-            }
-        }
-        #endregion
 
         private void displayWindow(Window window)
         {
@@ -82,14 +78,48 @@ namespace Kurirska_Služba
         {
             displayWindow(new WindowPrice() { Owner = this });
         }
-        private void updateViews()
+
+        private void miAccount_Click(object sender, RoutedEventArgs e)
         {
-            viewPackageHistory.ShowData();
-            viewPackages.ShowData();
-            viewCouriers.ShowData();
-            viewClients.ShowData();
-            viewManagers.ShowData();
-            viewPrices.ShowData();
+            WindowManager account = new WindowManager(managerID, "MenadzerID") { Owner = this };
+            account.ShowDialog();
+        }
+
+        private void miSignOut_Click(object sender, RoutedEventArgs e)
+        {
+            Login login = new Login();
+            login.Show();
+            Close();
+        }
+
+        private void miExitProgram_Click(object sender, RoutedEventArgs e)
+        {
+            Application.Current.Shutdown();
+        }
+
+        private void miNewVersion_Click(object sender, RoutedEventArgs e)
+        {
+            ProcessStartInfo psi = new ProcessStartInfo
+            {
+                FileName = "https://github.com/draganovik/KurirskaSluzba",
+                UseShellExecute = true
+            };
+            Process.Start(psi);
+        }
+
+        private void miSupport_Click(object sender, RoutedEventArgs e)
+        {
+            ProcessStartInfo psi = new ProcessStartInfo
+            {
+                FileName = "https://draganovik.com/kontakt",
+                UseShellExecute = true
+            };
+            Process.Start(psi);
+        }
+
+        private void miAbout_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Kurirska Služba - Verzija 1.0 \t\t\t\nVlasništvo: Mladen Draganović", "O aplikaciji", MessageBoxButton.OK, MessageBoxImage.Asterisk);
         }
 
         private void tcMainContent_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -100,42 +130,21 @@ namespace Kurirska_Služba
             }
         }
 
-        private void miSignOut_Click(object sender, RoutedEventArgs e)
+        #region Menubar fix
+        private static readonly FieldInfo _menuDropAlignmentField;
+
+        private static void SystemParameters_StaticPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            Login login = new Login();
-            login.Show();
-            this.Close();
+            EnsureStandardPopupAlignment();
         }
 
-        private void miExitProgram_Click(object sender, RoutedEventArgs e)
+        private static void EnsureStandardPopupAlignment()
         {
-            Application.Current.Shutdown();
-        }
-
-        private void miAccount_Click(object sender, RoutedEventArgs e)
-        {
-            WindowManager account = new WindowManager(managerID, "MenadzerID") { Owner = this };
-            account.ShowDialog();
-        }
-
-        private void miNewVersion_Click(object sender, RoutedEventArgs e)
-        {
-            var psi = new ProcessStartInfo
+            if (SystemParameters.MenuDropAlignment && _menuDropAlignmentField != null)
             {
-                FileName = "https://github.com/draganovik/KurirskaSluzba",
-                UseShellExecute = true
-            };
-            Process.Start(psi);
+                _menuDropAlignmentField.SetValue(null, false);
+            }
         }
-
-        private void miSupport_Click(object sender, RoutedEventArgs e)
-        {
-            var psi = new ProcessStartInfo
-            {
-                FileName = "https://draganovik.com/kontakt",
-                UseShellExecute = true
-            };
-            Process.Start(psi);
-        }
+        #endregion
     }
 }
