@@ -1,5 +1,7 @@
 # Kurirska Služba
 
+<img src="https://raw.githubusercontent.com/draganovik/KurirskaSluzba/main/Kurirska%20Slu%C5%BEba/Assets/logo.png?token=ADZAMVLTQIQ6BYYZ7ITJVKTABS32Q" alt="App logo" width="200"/>
+
 ## Poslovni informacioni sistemi 2020/2021 [3. semestar]
 
 #### Lični podaci
